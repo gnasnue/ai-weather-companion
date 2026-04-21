@@ -19,7 +19,7 @@ const pains = [
 const diffs = [
   { icon: "👶", title: "내 아이만을 위한 맞춤 정보", desc: "아이 체질과 건강 정보를 기반으로 꼭 필요한 정보만 골라드려요" },
   { icon: "⏰", title: "시간대별 날씨 정보", desc: "등원, 야외활동, 하원, 저녁 산책까지 시간대별로 미리 확인하세요" },
-  { icon: "🤖", title: "엄마 아빠를 위한 AI 비서", desc: "흩어진 정보를 대신 모아 분석까지, 필요한 건 AI가 알아서 다 알려드려요" },
+  { icon: "🤖", title: "엄마 아빠를 위한 AI 비서", desc: "흩어진 정보를 대신 모아 분석까지, AI가 알아서 다 알려드려요" },
   { icon: "🔬", title: "전문 학회 데이터 기반", desc: "대한소아과학회 등 전문 기관 자료를 근거로 해요" },
 ];
 
@@ -31,42 +31,42 @@ const reviews = [
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Nav */}
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md">
-        <div className="container-app flex h-16 items-center justify-between">
-          <Logo />
-          <div className="flex items-center gap-2">
-            <Link to="/signup">
-              <Button variant="ghost" size="sm" className="text-foreground">로그인</Button>
-            </Link>
-            <Link to="/signup">
-              <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary-hover shadow-soft">
-                무료로 시작하기
-              </Button>
-            </Link>
+    <div className="page-shell">
+      <div className="page-frame animate-fade-in">
+        {/* Nav */}
+        <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-md">
+          <div className="container-mobile flex h-14 items-center justify-between">
+            <Logo />
+            <div className="flex items-center gap-1">
+              <Link to="/signup">
+                <Button variant="ghost" size="sm" className="h-8 px-2 text-xs text-foreground">로그인</Button>
+              </Link>
+              <Link to="/signup">
+                <Button size="sm" className="h-8 bg-primary px-3 text-xs text-primary-foreground hover:bg-primary-hover shadow-soft">
+                  무료 시작
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Hero */}
-      <section className="bg-secondary">
-        <div className="container-app py-16 md:py-24 text-center">
-          <div className="mx-auto max-w-3xl animate-fade-up">
+        {/* Hero */}
+        <section className="bg-secondary">
+          <div className="container-mobile py-12 text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-background/70 px-3 py-1 text-xs font-medium text-accent shadow-soft">
               ✨ AI 환경 비서
             </span>
-            <h1 className="mt-6 text-3xl font-bold leading-tight tracking-tight text-foreground md:text-5xl">
-              오늘 우리 아이에게 뭘 입혀야 할지,<br />
+            <h1 className="mt-5 text-2xl font-bold leading-tight tracking-tight text-foreground">
+              오늘 우리 아이에게<br />뭘 입혀야 할지,<br />
               <span className="text-accent">AI가 알려드려요</span>
             </h1>
-            <p className="mt-5 text-base leading-relaxed text-muted-foreground md:text-lg">
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               날씨, 미세먼지, 꽃가루, 자외선까지.<br />
               아이 체질에 맞게 매일 아침 리포트를 보내드려요.
             </p>
-            <div className="mt-8 flex flex-col items-center gap-3">
-              <Link to="/signup">
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary-hover h-12 px-8 text-base shadow-glow">
+            <div className="mt-7 flex flex-col items-center gap-3">
+              <Link to="/signup" className="w-full">
+                <Button size="lg" className="h-12 w-full bg-primary text-base text-primary-foreground hover:bg-primary-hover shadow-glow">
                   무료로 시작하기
                 </Button>
               </Link>
@@ -75,112 +75,110 @@ const Index = () => {
               </Link>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Pain points */}
-      <section className="py-16 md:py-24">
-        <div className="container-app">
-          <h2 className="text-center text-2xl font-bold tracking-tight md:text-3xl">
-            매일 아침 이런 고민 하고 계신가요?
-          </h2>
-          <div className="mt-10 grid gap-4 md:grid-cols-2">
-            {pains.map((p, i) => (
-              <div key={i} className="rounded-2xl border border-border bg-card p-6 shadow-soft transition-smooth hover:shadow-card">
-                <div className="text-3xl">😩</div>
-                <p className="mt-3 leading-relaxed text-foreground">{p}</p>
-              </div>
-            ))}
+        {/* Pain points */}
+        <section className="py-12">
+          <div className="container-mobile">
+            <h2 className="text-center text-xl font-bold tracking-tight">
+              매일 아침 이런 고민<br />하고 계신가요?
+            </h2>
+            <div className="mt-6 space-y-3">
+              {pains.map((p, i) => (
+                <div key={i} className="rounded-2xl border border-border bg-card p-4 shadow-soft">
+                  <div className="text-2xl">😩</div>
+                  <p className="mt-2 text-sm leading-relaxed text-foreground">{p}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Differentiators */}
-      <section className="bg-soft py-16 md:py-24">
-        <div className="container-app">
-          <h2 className="text-center text-2xl font-bold tracking-tight md:text-3xl">
-            아이웨더는 이렇게 다릅니다
-          </h2>
-          <div className="mt-10 grid gap-5 md:grid-cols-2">
-            {diffs.map((d) => (
-              <div key={d.title} className="rounded-2xl bg-background p-6 shadow-soft">
-                <div className="text-3xl">{d.icon}</div>
-                <h3 className="mt-3 text-lg font-semibold">{d.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{d.desc}</p>
-              </div>
-            ))}
+        {/* Differentiators */}
+        <section className="bg-soft py-12">
+          <div className="container-mobile">
+            <h2 className="text-center text-xl font-bold tracking-tight">
+              아이웨더는<br />이렇게 다릅니다
+            </h2>
+            <div className="mt-6 space-y-3">
+              {diffs.map((d) => (
+                <div key={d.title} className="rounded-2xl bg-background p-4 shadow-soft">
+                  <div className="text-2xl">{d.icon}</div>
+                  <h3 className="mt-2 text-base font-semibold">{d.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{d.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Features */}
-      <section className="py-16 md:py-24">
-        <div className="container-app">
-          <h2 className="text-center text-2xl font-bold tracking-tight md:text-3xl">
-            아이웨더가 대신 챙겨드릴게요
-          </h2>
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {features.map((f) => (
-              <div key={f.title} className="group rounded-2xl border border-border bg-card p-6 transition-smooth hover:-translate-y-1 hover:border-primary hover:shadow-card">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary text-2xl">{f.icon}</div>
-                <h3 className="mt-4 font-semibold">{f.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
-              </div>
-            ))}
+        {/* Features */}
+        <section className="py-12">
+          <div className="container-mobile">
+            <h2 className="text-center text-xl font-bold tracking-tight">
+              아이웨더가<br />대신 챙겨드릴게요
+            </h2>
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              {features.map((f) => (
+                <div key={f.title} className="rounded-2xl border border-border bg-card p-4 transition-smooth hover:border-primary hover:shadow-card">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-xl">{f.icon}</div>
+                  <h3 className="mt-3 text-sm font-semibold leading-snug">{f.title}</h3>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{f.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Reviews */}
-      <section className="bg-secondary py-16 md:py-24">
-        <div className="container-app">
-          <h2 className="text-center text-2xl font-bold tracking-tight md:text-3xl">
-            아이웨더를 사용하는 부모님들의 이야기
-          </h2>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {reviews.map((r, i) => (
-              <div key={i} className="rounded-2xl bg-background p-6 shadow-soft">
-                <div className="text-2xl text-primary">"</div>
-                <p className="leading-relaxed text-foreground">{r.text}</p>
-                <p className="mt-4 text-sm text-muted-foreground">— {r.who}</p>
-              </div>
-            ))}
+        {/* Reviews */}
+        <section className="bg-secondary py-12">
+          <div className="container-mobile">
+            <h2 className="text-center text-xl font-bold tracking-tight">
+              부모님들의 이야기
+            </h2>
+            <div className="mt-6 space-y-3">
+              {reviews.map((r, i) => (
+                <div key={i} className="rounded-2xl bg-background p-4 shadow-soft">
+                  <div className="text-2xl text-primary leading-none">"</div>
+                  <p className="text-sm leading-relaxed text-foreground">{r.text}</p>
+                  <p className="mt-3 text-xs text-muted-foreground">— {r.who}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA */}
-      <section className="bg-primary">
-        <div className="container-app py-16 text-center md:py-20">
-          <h2 className="text-2xl font-bold tracking-tight text-primary-foreground md:text-3xl">
-            오늘부터 아이웨더가 대신 챙겨드릴게요
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl leading-relaxed text-primary-foreground/90">
-            매일 아침 바쁜 엄마 아빠 곁에서,<br />
-            우리 아이의 하루를 함께 준비합니다.
-          </p>
-          <Link to="/signup" className="mt-8 inline-block">
-            <Button size="lg" className="h-12 bg-background px-8 text-base font-semibold text-foreground hover:bg-background/90">
-              무료로 시작하기
-            </Button>
-          </Link>
-        </div>
-      </section>
+        {/* CTA */}
+        <section className="bg-primary">
+          <div className="container-mobile py-12 text-center">
+            <h2 className="text-xl font-bold tracking-tight text-primary-foreground">
+              오늘부터 아이웨더가<br />대신 챙겨드릴게요
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-primary-foreground/90">
+              매일 아침 바쁜 엄마 아빠 곁에서,<br />
+              우리 아이의 하루를 함께 준비합니다.
+            </p>
+            <Link to="/signup" className="mt-6 block">
+              <Button size="lg" className="h-12 w-full bg-background text-base font-semibold text-foreground hover:bg-background/90">
+                무료로 시작하기
+              </Button>
+            </Link>
+          </div>
+        </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border bg-background">
-        <div className="container-app py-10">
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        {/* Footer */}
+        <footer className="border-t border-border bg-background">
+          <div className="container-mobile py-8">
             <Logo />
-            <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+            <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
               <a href="#" className="hover:text-foreground">이용약관</a>
               <a href="#" className="hover:text-foreground">개인정보처리방침</a>
               <a href="mailto:hello@aiweather.app" className="hover:text-foreground">hello@aiweather.app</a>
             </div>
+            <p className="mt-4 text-xs text-muted-foreground">© 2025 아이웨더. All rights reserved.</p>
           </div>
-          <p className="mt-6 text-xs text-muted-foreground">© 2025 아이웨더. All rights reserved.</p>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </div>
   );
 };

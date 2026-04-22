@@ -196,7 +196,7 @@ const Home = () => {
                 <div className="flex-1">
                   <p className="text-xs font-medium text-accent">AI 리포트 · 오늘 아침</p>
                   <p className="mt-1 leading-relaxed text-foreground">
-                    {renderBold(message)}
+                    {renderRich(message)}
                   </p>
                 </div>
               </div>

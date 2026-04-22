@@ -278,16 +278,24 @@ const Home = () => {
                         <span className="text-xs text-muted-foreground">체감 {t.feels}°</span>
                       </div>
                       <dl className="mt-3 space-y-1 text-xs">
-                        {[
-                          ["미세먼지", t.dust],
-                          ["자외선", t.uv],
-                          ["꽃가루", t.pollen],
-                          ["습도", `${t.humidity}%`],
-                          ["바람", t.wind],
-                        ].map(([k, v]) => (
+                        {([
+                          ["미세먼지", t.dust, ["나쁨", "매우나쁨"].includes(t.dust)],
+                          ["자외선", t.uv, ["강함", "매우강함"].includes(t.uv)],
+                          ["꽃가루", t.pollen, ["높음", "매우높음"].includes(t.pollen)],
+                          ["습도", `${t.humidity}%`, t.humidity <= 40],
+                          ["바람", t.wind, t.wind === "강함"],
+                        ] as [string, string, boolean][]).map(([k, v, bad]) => (
                           <div key={k} className="flex items-center justify-between">
                             <dt className="text-muted-foreground">{k}</dt>
-                            <dd className="font-medium text-foreground">{v}</dd>
+                            <dd
+                              className={
+                                bad
+                                  ? "font-bold text-accent"
+                                  : "font-medium text-foreground"
+                              }
+                            >
+                              {v}
+                            </dd>
                           </div>
                         ))}
                       </dl>
@@ -296,9 +304,16 @@ const Home = () => {
             </div>
           </section>
 
+          {/* Character-based personalized report */}
+          {!loading && (
+            <CharacterReport gender={cur.gender} childName={cur.name} />
+          )}
+
           {/* Recommended items */}
           <section className="mt-7">
-            <h2 className="text-base font-bold tracking-tight">오늘의 추천 아이템</h2>
+            <h2 className="text-base font-bold tracking-tight">
+              {cur.name}이를 위한 오늘의 추천 아이템
+            </h2>
             <div className="mt-3 -mx-5 flex gap-3 overflow-x-auto px-5 pb-1 scrollbar-hide">
               {loading
                 ? Array.from({ length: 3 }).map((_, i) => (

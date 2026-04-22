@@ -1,3 +1,5 @@
+import { withSubjectSuffix } from "@/lib/korean";
+
 type Gender = "male" | "female" | "unknown";
 
 type Callout = {
@@ -44,84 +46,127 @@ const calloutsData: Callout[] = [
   },
 ];
 
+// Cute, minimal, friendly child illustration (chibi-style)
 const Character = ({ gender }: { gender: Gender }) => {
   const isFemale = gender === "female";
-  const hairColor = "hsl(25 45% 25%)";
-  const skinColor = "hsl(30 60% 88%)";
-  const shirtColor = isFemale ? "hsl(340 70% 80%)" : "hsl(200 65% 70%)";
-  const pantsColor = isFemale ? "hsl(340 50% 60%)" : "hsl(220 45% 40%)";
+  const skin = "hsl(28 70% 90%)";
+  const skinShade = "hsl(28 60% 82%)";
+  const hair = "hsl(25 55% 28%)";
+  const cheek = "hsl(0 80% 85%)";
+  const ink = "hsl(0 0% 18%)";
+  const top = isFemale ? "hsl(345 80% 82%)" : "hsl(200 75% 75%)";
+  const topShade = isFemale ? "hsl(345 60% 70%)" : "hsl(200 60% 62%)";
+  const bottom = isFemale ? "hsl(260 35% 55%)" : "hsl(220 35% 45%)";
 
   return (
     <svg
-      viewBox="0 0 120 200"
+      viewBox="0 0 200 240"
       className="h-full w-auto"
       aria-label={isFemale ? "여아 캐릭터" : "남아 캐릭터"}
     >
-      {/* Hair back (female longer) */}
-      {isFemale && (
-        <ellipse cx="60" cy="42" rx="26" ry="30" fill={hairColor} />
+      {/* Soft ground shadow */}
+      <ellipse cx="100" cy="225" rx="55" ry="6" fill={ink} opacity="0.08" />
+
+      {/* Legs */}
+      <rect x="80" y="180" width="14" height="32" rx="6" fill={skin} />
+      <rect x="106" y="180" width="14" height="32" rx="6" fill={skin} />
+      {/* Shoes */}
+      <ellipse cx="87" cy="215" rx="12" ry="5" fill={ink} />
+      <ellipse cx="113" cy="215" rx="12" ry="5" fill={ink} />
+
+      {/* Body — rounded onesie/dress shape */}
+      {isFemale ? (
+        <path
+          d="M58 130 Q60 118 75 116 L125 116 Q140 118 142 130 L150 188 Q100 200 50 188 Z"
+          fill={top}
+        />
+      ) : (
+        <path
+          d="M62 130 Q64 118 78 116 L122 116 Q136 118 138 130 L142 188 Q100 196 58 188 Z"
+          fill={top}
+        />
       )}
-      {/* Head */}
-      <circle cx="60" cy="40" r="22" fill={skinColor} />
+      {/* Body shading */}
+      <path
+        d={
+          isFemale
+            ? "M58 175 Q100 188 142 175 L144 188 Q100 200 56 188 Z"
+            : "M58 178 Q100 188 142 178 L143 188 Q100 196 57 188 Z"
+        }
+        fill={topShade}
+        opacity="0.55"
+      />
+
+      {/* Pants peek for boy */}
+      {!isFemale && (
+        <path d="M70 180 L72 195 L128 195 L130 180 Z" fill={bottom} />
+      )}
+
+      {/* Arms */}
+      <ellipse cx="55" cy="148" rx="10" ry="22" fill={top} />
+      <ellipse cx="145" cy="148" rx="10" ry="22" fill={top} />
+      {/* Hands */}
+      <circle cx="55" cy="172" r="8" fill={skin} />
+      <circle cx="145" cy="172" r="8" fill={skin} />
+
+      {/* Neck */}
+      <rect x="92" y="100" width="16" height="14" rx="4" fill={skinShade} />
+
+      {/* Hair back layer (longer for girl) */}
+      {isFemale && (
+        <path
+          d="M44 70 Q44 110 60 122 L72 118 Q56 100 58 70 Z M156 70 Q156 110 140 122 L128 118 Q144 100 142 70 Z"
+          fill={hair}
+        />
+      )}
+
+      {/* Head — large chibi proportions */}
+      <ellipse cx="100" cy="68" rx="42" ry="40" fill={skin} />
+
       {/* Hair top */}
       {isFemale ? (
         <>
+          {/* Bangs */}
           <path
-            d="M38 38 Q40 18 60 18 Q80 18 82 38 Q78 28 60 28 Q42 28 38 38 Z"
-            fill={hairColor}
+            d="M60 60 Q62 28 100 26 Q138 28 140 60 Q132 48 118 50 Q108 38 100 50 Q92 38 82 50 Q68 48 60 60 Z"
+            fill={hair}
           />
-          {/* pigtails */}
-          <circle cx="34" cy="46" r="6" fill={hairColor} />
-          <circle cx="86" cy="46" r="6" fill={hairColor} />
+          {/* Side puffs */}
+          <circle cx="54" cy="74" r="10" fill={hair} />
+          <circle cx="146" cy="74" r="10" fill={hair} />
+          {/* Tiny bow */}
+          <circle cx="78" cy="36" r="4" fill="hsl(345 85% 70%)" />
+          <circle cx="84" cy="36" r="4" fill="hsl(345 85% 70%)" />
+          <circle cx="81" cy="36" r="2" fill="hsl(345 70% 55%)" />
         </>
       ) : (
         <path
-          d="M38 36 Q42 20 60 20 Q78 20 82 36 Q74 30 60 30 Q46 30 38 36 Z"
-          fill={hairColor}
+          d="M60 62 Q64 30 100 28 Q136 30 140 62 Q130 52 118 54 Q110 44 100 54 Q90 44 82 54 Q70 52 60 62 Z"
+          fill={hair}
         />
       )}
-      {/* Eyes */}
-      <circle cx="52" cy="42" r="2" fill="hsl(0 0% 13%)" />
-      <circle cx="68" cy="42" r="2" fill="hsl(0 0% 13%)" />
+
+      {/* Eyes — big sparkly chibi */}
+      <ellipse cx="82" cy="74" rx="6" ry="8" fill={ink} />
+      <ellipse cx="118" cy="74" rx="6" ry="8" fill={ink} />
+      {/* Eye sparkles */}
+      <circle cx="84" cy="71" r="2" fill="white" />
+      <circle cx="120" cy="71" r="2" fill="white" />
+      <circle cx="80" cy="77" r="1" fill="white" />
+      <circle cx="116" cy="77" r="1" fill="white" />
+
       {/* Cheeks */}
-      <circle cx="48" cy="48" r="2.5" fill="hsl(0 70% 85%)" opacity="0.7" />
-      <circle cx="72" cy="48" r="2.5" fill="hsl(0 70% 85%)" opacity="0.7" />
+      <ellipse cx="72" cy="86" rx="6" ry="4" fill={cheek} opacity="0.75" />
+      <ellipse cx="128" cy="86" rx="6" ry="4" fill={cheek} opacity="0.75" />
+
       {/* Smile */}
       <path
-        d="M55 50 Q60 54 65 50"
-        stroke="hsl(0 0% 13%)"
-        strokeWidth="1.5"
+        d="M93 90 Q100 96 107 90"
+        stroke={ink}
+        strokeWidth="2"
         fill="none"
         strokeLinecap="round"
       />
-      {/* Neck */}
-      <rect x="55" y="60" width="10" height="8" fill={skinColor} />
-      {/* Body / shirt */}
-      <path
-        d="M35 70 Q40 68 60 68 Q80 68 85 70 L88 115 Q60 120 32 115 Z"
-        fill={shirtColor}
-      />
-      {/* Arms */}
-      <rect x="28" y="72" width="9" height="40" rx="4" fill={shirtColor} />
-      <rect x="83" y="72" width="9" height="40" rx="4" fill={shirtColor} />
-      {/* Hands */}
-      <circle cx="32" cy="115" r="5" fill={skinColor} />
-      <circle cx="88" cy="115" r="5" fill={skinColor} />
-      {/* Pants/Skirt */}
-      {isFemale ? (
-        <path d="M35 115 L28 160 L60 162 L92 160 L85 115 Z" fill={pantsColor} />
-      ) : (
-        <path
-          d="M38 115 L34 160 L52 162 L58 120 L62 120 L68 162 L86 160 L82 115 Z"
-          fill={pantsColor}
-        />
-      )}
-      {/* Legs */}
-      <rect x="44" y="160" width="12" height="22" fill={skinColor} />
-      <rect x="64" y="160" width="12" height="22" fill={skinColor} />
-      {/* Shoes */}
-      <ellipse cx="50" cy="185" rx="9" ry="4" fill="hsl(0 0% 25%)" />
-      <ellipse cx="70" cy="185" rx="9" ry="4" fill="hsl(0 0% 25%)" />
     </svg>
   );
 };
@@ -129,9 +174,9 @@ const Character = ({ gender }: { gender: Gender }) => {
 // Position of each callout's anchor point on the character (in % of container)
 const anchors: Record<Callout["zone"], { x: number; y: number }> = {
   head: { x: 50, y: 18 },
-  neck: { x: 50, y: 33 },
-  skin: { x: 38, y: 50 },
-  outfit: { x: 62, y: 55 },
+  neck: { x: 50, y: 36 },
+  skin: { x: 38, y: 52 },
+  outfit: { x: 62, y: 58 },
 };
 
 // Position of the callout box itself
@@ -153,15 +198,15 @@ const CharacterReport = ({
     <section className="mt-7">
       <div className="flex items-baseline justify-between">
         <h2 className="text-base font-bold tracking-tight">
-          {childName}이를 위한 한눈 리포트
+          {withSubjectSuffix(childName)} 위한 오늘의 종합 솔루션
         </h2>
         <span className="text-xs text-muted-foreground">탭하면 자세히 →</span>
       </div>
 
       <div className="mt-3 rounded-2xl border border-border bg-card p-4 shadow-soft">
-        <div className="relative mx-auto h-[320px] w-full max-w-[340px]">
+        <div className="relative mx-auto h-[340px] w-full max-w-[340px]">
           {/* Character centered */}
-          <div className="absolute left-1/2 top-1/2 h-[280px] -translate-x-1/2 -translate-y-1/2">
+          <div className="absolute left-1/2 top-1/2 h-[300px] -translate-x-1/2 -translate-y-1/2">
             <Character gender={gender} />
           </div>
 
@@ -173,7 +218,6 @@ const CharacterReport = ({
           >
             {calloutsData.map((c) => {
               const a = anchors[c.zone];
-              // line endpoints near the box positions
               const ends: Record<Callout["zone"], { x: number; y: number }> = {
                 head: { x: 78, y: 8 },
                 neck: { x: 22, y: 32 },

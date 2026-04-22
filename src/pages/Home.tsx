@@ -4,11 +4,13 @@ import { Bell, Settings, MapPin, ChevronDown, Check } from "lucide-react";
 import Logo from "@/components/Logo";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import CharacterReport from "@/components/CharacterReport";
 
-type Profile = { id: string; name: string; emoji: string; age: string };
+type Gender = "male" | "female" | "unknown";
+type Profile = { id: string; name: string; emoji: string; age: string; gender: Gender };
 const profiles: Profile[] = [
-  { id: "1", name: "지우", emoji: "👧", age: "6세" },
-  { id: "2", name: "도윤", emoji: "👦", age: "4세" },
+  { id: "1", name: "지우", emoji: "👧", age: "6세", gender: "female" },
+  { id: "2", name: "도윤", emoji: "👦", age: "4세", gender: "male" },
 ];
 
 const badges = [

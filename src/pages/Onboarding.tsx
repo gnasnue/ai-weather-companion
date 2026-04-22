@@ -132,6 +132,42 @@ const Onboarding = () => {
   const toggleCond = (c: string) =>
     update({ conds: s.conds.includes(c) ? s.conds.filter((x) => x !== c) : [...s.conds, c] });
 
+  const finish = () => {
+    const gender = koreanGenderToCode(s.gender);
+    const profile: ChildProfile = {
+      id: `c-${Date.now()}`,
+      name: s.name.trim(),
+      emoji: genderToEmoji(gender),
+      age: calcAge(s.year),
+      gender,
+      birth: { year: s.year, month: s.month, day: s.day },
+      conditions: s.conds,
+      conditionEtc: s.condEtc,
+      cold: s.cold,
+      hot: s.hot,
+      sweat: s.sweat,
+      schedule: {
+        goSchool: s.goSchool,
+        outdoorStart: s.outdoorStart,
+        outdoorEnd: s.outdoorEnd,
+        leaveSchool: s.leaveSchool,
+        eveningStart: s.eveningStart,
+        eveningEnd: s.eveningEnd,
+      },
+      notif: {
+        ...s.notif,
+        nightTime: s.nightTime,
+        morningBefore: s.morningBefore,
+        summaryTime: s.summaryTime,
+      },
+      createdAt: Date.now(),
+    };
+    saveProfile(profile);
+    try {
+      localStorage.setItem("aiweather:activeProfileId", profile.id);
+    } catch {}
+  };
+
   const next = () => {
     if (step === 1 && !s.name.trim()) return toast.error("아이 이름을 입력해주세요");
     if (step === 2 && (!s.year || !s.month || !s.day)) return toast.error("생년월일을 모두 선택해주세요");
@@ -140,6 +176,7 @@ const Onboarding = () => {
     if (step === 5 && (!s.cold || !s.hot || !s.sweat)) return toast.error("세 항목 모두 선택해주세요");
     if (step < TOTAL) setStep(step + 1);
     else {
+      finish();
       try { localStorage.removeItem(STORAGE_KEY); } catch {}
       setDone(true);
     }

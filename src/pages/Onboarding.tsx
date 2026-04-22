@@ -13,11 +13,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import {
+  ChildProfile,
+  calcAge,
+  genderToEmoji,
+  koreanGenderToCode,
+  saveProfile,
+} from "@/lib/profile";
 
 const TOTAL = 7;
 const STORAGE_KEY = "aiweather:onboarding";
 
-const conditions = ["아토피", "비염", "식품 알러지", "환경 알러지", "천식", "해당없음", "기타"];
+const conditions = [
+  "호흡기 민감 (비염, 천식·기관지)",
+  "알레르기 체질 (꽃가루·먼지)",
+  "민감 피부 (아토피·건조·자외선)",
+  "체온조절 취약 (더위·추위)",
+  "해당없음",
+  "기타",
+];
 
 const sensitivity = [
   { v: "very-much", l: "매우 많이 탐" },
@@ -118,6 +132,42 @@ const Onboarding = () => {
   const toggleCond = (c: string) =>
     update({ conds: s.conds.includes(c) ? s.conds.filter((x) => x !== c) : [...s.conds, c] });
 
+  const finish = () => {
+    const gender = koreanGenderToCode(s.gender);
+    const profile: ChildProfile = {
+      id: `c-${Date.now()}`,
+      name: s.name.trim(),
+      emoji: genderToEmoji(gender),
+      age: calcAge(s.year),
+      gender,
+      birth: { year: s.year, month: s.month, day: s.day },
+      conditions: s.conds,
+      conditionEtc: s.condEtc,
+      cold: s.cold,
+      hot: s.hot,
+      sweat: s.sweat,
+      schedule: {
+        goSchool: s.goSchool,
+        outdoorStart: s.outdoorStart,
+        outdoorEnd: s.outdoorEnd,
+        leaveSchool: s.leaveSchool,
+        eveningStart: s.eveningStart,
+        eveningEnd: s.eveningEnd,
+      },
+      notif: {
+        ...s.notif,
+        nightTime: s.nightTime,
+        morningBefore: s.morningBefore,
+        summaryTime: s.summaryTime,
+      },
+      createdAt: Date.now(),
+    };
+    saveProfile(profile);
+    try {
+      localStorage.setItem("aiweather:activeProfileId", profile.id);
+    } catch {}
+  };
+
   const next = () => {
     if (step === 1 && !s.name.trim()) return toast.error("아이 이름을 입력해주세요");
     if (step === 2 && (!s.year || !s.month || !s.day)) return toast.error("생년월일을 모두 선택해주세요");
@@ -126,6 +176,7 @@ const Onboarding = () => {
     if (step === 5 && (!s.cold || !s.hot || !s.sweat)) return toast.error("세 항목 모두 선택해주세요");
     if (step < TOTAL) setStep(step + 1);
     else {
+      finish();
       try { localStorage.removeItem(STORAGE_KEY); } catch {}
       setDone(true);
     }
@@ -244,18 +295,18 @@ const Onboarding = () => {
       hint: "해당 항목이 있으면 관련 환경 지표를 더 꼼꼼히 알려드려요",
       node: (
         <div className="space-y-2">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-2">
             {conditions.map((c) => {
               const on = s.conds.includes(c);
               return (
                 <label
                   key={c}
-                  className={`flex h-12 cursor-pointer items-center gap-2 rounded-xl border-2 px-3.5 transition-smooth ${
+                  className={`flex min-h-12 cursor-pointer items-center gap-2.5 rounded-xl border-2 px-3.5 py-2.5 transition-smooth ${
                     on ? "border-primary bg-secondary" : "border-border bg-card hover:border-primary/40"
                   }`}
                 >
                   <Checkbox checked={on} onCheckedChange={() => toggleCond(c)} />
-                  <span className="text-sm">{c}</span>
+                  <span className="text-sm leading-snug">{c}</span>
                 </label>
               );
             })}
@@ -264,7 +315,7 @@ const Onboarding = () => {
             <Input
               value={s.condEtc}
               onChange={(e) => update({ condEtc: e.target.value })}
-              placeholder="기타 질환을 입력해주세요"
+              placeholder="기타 항목을 입력해주세요"
               className="h-12"
             />
           )}

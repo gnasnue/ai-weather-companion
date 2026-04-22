@@ -6,13 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import CharacterReport from "@/components/CharacterReport";
 import { withSubjectSuffix } from "@/lib/korean";
-
-type Gender = "male" | "female" | "unknown";
-type Profile = { id: string; name: string; emoji: string; age: string; gender: Gender };
-const profiles: Profile[] = [
-  { id: "1", name: "지우", emoji: "👧", age: "6세", gender: "female" },
-  { id: "2", name: "도윤", emoji: "👦", age: "4세", gender: "male" },
-];
+import { ChildProfile, loadProfiles } from "@/lib/profile";
 
 const badges = [
   { label: "미세먼지", value: "보통", tone: "ok" as const },
@@ -86,11 +80,32 @@ const navItems = [
 const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [active, setActive] = useState(profiles[0].id);
+  const [profiles, setProfiles] = useState<ChildProfile[]>(() => loadProfiles());
+  const [active, setActive] = useState<string>(() => {
+    try {
+      return localStorage.getItem("aiweather:activeProfileId") || loadProfiles()[0].id;
+    } catch {
+      return loadProfiles()[0].id;
+    }
+  });
   const [checked, setChecked] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const cur = profiles.find((p) => p.id === active)!;
+  // Refresh profiles when returning from onboarding
+  useEffect(() => {
+    const list = loadProfiles();
+    setProfiles(list);
+    if (!list.find((p) => p.id === active)) {
+      setActive(list[0].id);
+    }
+  }, [location.key]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Persist active profile
+  useEffect(() => {
+    try { localStorage.setItem("aiweather:activeProfileId", active); } catch {}
+  }, [active]);
+
+  const cur = profiles.find((p) => p.id === active) ?? profiles[0];
   const allDone = checked.length === baseChecklist.length;
 
   // simulate initial loading
@@ -344,7 +359,7 @@ const Home = () => {
               {navItems.map((n) => {
                 const isActive = location.pathname === n.to;
                 const handleClick = (e: React.MouseEvent) => {
-                  if (n.to !== "/home") {
+                  if (n.to !== "/home" && n.to !== "/me") {
                     e.preventDefault();
                     toast(`${n.label} 페이지는 준비 중이에요`);
                   }

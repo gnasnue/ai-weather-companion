@@ -258,18 +258,18 @@ const Onboarding = () => {
       hint: "해당 항목이 있으면 관련 환경 지표를 더 꼼꼼히 알려드려요",
       node: (
         <div className="space-y-2">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-2">
             {conditions.map((c) => {
               const on = s.conds.includes(c);
               return (
                 <label
                   key={c}
-                  className={`flex h-12 cursor-pointer items-center gap-2 rounded-xl border-2 px-3.5 transition-smooth ${
+                  className={`flex min-h-12 cursor-pointer items-center gap-2.5 rounded-xl border-2 px-3.5 py-2.5 transition-smooth ${
                     on ? "border-primary bg-secondary" : "border-border bg-card hover:border-primary/40"
                   }`}
                 >
                   <Checkbox checked={on} onCheckedChange={() => toggleCond(c)} />
-                  <span className="text-sm">{c}</span>
+                  <span className="text-sm leading-snug">{c}</span>
                 </label>
               );
             })}
@@ -278,7 +278,7 @@ const Onboarding = () => {
             <Input
               value={s.condEtc}
               onChange={(e) => update({ condEtc: e.target.value })}
-              placeholder="기타 질환을 입력해주세요"
+              placeholder="기타 항목을 입력해주세요"
               className="h-12"
             />
           )}

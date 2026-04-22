@@ -5,6 +5,7 @@ import Logo from "@/components/Logo";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import CharacterReport from "@/components/CharacterReport";
+import { withSubjectSuffix } from "@/lib/korean";
 
 type Gender = "male" | "female" | "unknown";
 type Profile = { id: string; name: string; emoji: string; age: string; gender: Gender };
@@ -29,9 +30,9 @@ const baseChecklist = [
 ];
 
 const timeline = [
-  { time: "등원", hour: "08:00", icon: "⛅", temp: 12, feels: 10, dust: "보통", uv: "낮음", pollen: "높음", humidity: 45, wind: "약함" },
+  { time: "등원시간", hour: "08:00", icon: "⛅", temp: 12, feels: 10, dust: "보통", uv: "낮음", pollen: "높음", humidity: 45, wind: "약함" },
   { time: "야외활동", hour: "11:00", icon: "☀️", temp: 18, feels: 17, dust: "보통", uv: "보통", pollen: "높음", humidity: 38, wind: "보통" },
-  { time: "하원", hour: "15:00", icon: "🌤️", temp: 21, feels: 20, dust: "나쁨", uv: "강함", pollen: "매우높음", humidity: 35, wind: "강함" },
+  { time: "하원시간", hour: "15:00", icon: "🌤️", temp: 21, feels: 20, dust: "나쁨", uv: "강함", pollen: "매우높음", humidity: 35, wind: "강함" },
   { time: "저녁", hour: "18:00", icon: "🌥️", temp: 16, feels: 14, dust: "보통", uv: "낮음", pollen: "보통", humidity: 50, wind: "강함" },
 ];
 
@@ -256,7 +257,7 @@ const Home = () => {
               <h2 className="text-base font-bold tracking-tight">시간대별 환경</h2>
               <span className="text-xs text-muted-foreground">가로로 스크롤 →</span>
             </div>
-            <div className="mt-3 -mx-5 flex gap-3 overflow-x-auto px-5 pb-1 scrollbar-hide">
+            <div className="mt-3 -mx-5 flex flex-nowrap gap-3 overflow-x-auto overflow-y-hidden px-5 pb-2 scrollbar-hide [-webkit-overflow-scrolling:touch]">
               {loading
                 ? Array.from({ length: 3 }).map((_, i) => (
                     <Skeleton key={i} className="h-44 w-[150px] shrink-0 rounded-2xl" />
@@ -264,7 +265,7 @@ const Home = () => {
                 : timeline.map((t) => (
                     <article
                       key={t.time}
-                      className="min-w-[150px] shrink-0 rounded-2xl border border-border bg-card p-4 shadow-soft"
+                      className="w-[150px] shrink-0 rounded-2xl border border-border bg-card p-4 shadow-soft"
                     >
                       <div className="flex items-center justify-between">
                         <div>
@@ -312,9 +313,9 @@ const Home = () => {
           {/* Recommended items */}
           <section className="mt-7">
             <h2 className="text-base font-bold tracking-tight">
-              {cur.name}이를 위한 오늘의 추천 아이템
+              {withSubjectSuffix(cur.name)} 위한 오늘의 추천 아이템
             </h2>
-            <div className="mt-3 -mx-5 flex gap-3 overflow-x-auto px-5 pb-1 scrollbar-hide">
+            <div className="mt-3 -mx-5 flex flex-nowrap gap-3 overflow-x-auto overflow-y-hidden px-5 pb-2 scrollbar-hide [-webkit-overflow-scrolling:touch]">
               {loading
                 ? Array.from({ length: 3 }).map((_, i) => (
                     <Skeleton key={i} className="h-44 w-[130px] shrink-0 rounded-2xl" />
@@ -323,7 +324,7 @@ const Home = () => {
                     <button
                       key={it.name}
                       onClick={() => toast("외부 구매 페이지로 이동합니다")}
-                      className="min-w-[130px] shrink-0 rounded-2xl border border-border bg-card p-3 text-left shadow-soft transition-smooth hover:border-primary"
+                      className="w-[130px] shrink-0 rounded-2xl border border-border bg-card p-3 text-left shadow-soft transition-smooth hover:border-primary"
                     >
                       <div className="flex h-24 items-center justify-center rounded-xl bg-secondary text-5xl">
                         {it.emoji}

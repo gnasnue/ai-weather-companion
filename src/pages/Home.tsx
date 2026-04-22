@@ -6,13 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import CharacterReport from "@/components/CharacterReport";
 import { withSubjectSuffix } from "@/lib/korean";
-
-type Gender = "male" | "female" | "unknown";
-type Profile = { id: string; name: string; emoji: string; age: string; gender: Gender };
-const profiles: Profile[] = [
-  { id: "1", name: "지우", emoji: "👧", age: "6세", gender: "female" },
-  { id: "2", name: "도윤", emoji: "👦", age: "4세", gender: "male" },
-];
+import { ChildProfile, loadProfiles } from "@/lib/profile";
 
 const badges = [
   { label: "미세먼지", value: "보통", tone: "ok" as const },

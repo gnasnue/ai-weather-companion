@@ -80,11 +80,32 @@ const navItems = [
 const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [active, setActive] = useState(profiles[0].id);
+  const [profiles, setProfiles] = useState<ChildProfile[]>(() => loadProfiles());
+  const [active, setActive] = useState<string>(() => {
+    try {
+      return localStorage.getItem("aiweather:activeProfileId") || loadProfiles()[0].id;
+    } catch {
+      return loadProfiles()[0].id;
+    }
+  });
   const [checked, setChecked] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const cur = profiles.find((p) => p.id === active)!;
+  // Refresh profiles when returning from onboarding
+  useEffect(() => {
+    const list = loadProfiles();
+    setProfiles(list);
+    if (!list.find((p) => p.id === active)) {
+      setActive(list[0].id);
+    }
+  }, [location.key]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Persist active profile
+  useEffect(() => {
+    try { localStorage.setItem("aiweather:activeProfileId", active); } catch {}
+  }, [active]);
+
+  const cur = profiles.find((p) => p.id === active) ?? profiles[0];
   const allDone = checked.length === baseChecklist.length;
 
   // simulate initial loading

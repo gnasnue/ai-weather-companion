@@ -4,11 +4,13 @@ import { Bell, Settings, MapPin, ChevronDown, Check } from "lucide-react";
 import Logo from "@/components/Logo";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import CharacterReport from "@/components/CharacterReport";
 
-type Profile = { id: string; name: string; emoji: string; age: string };
+type Gender = "male" | "female" | "unknown";
+type Profile = { id: string; name: string; emoji: string; age: string; gender: Gender };
 const profiles: Profile[] = [
-  { id: "1", name: "지우", emoji: "👧", age: "6세" },
-  { id: "2", name: "도윤", emoji: "👦", age: "4세" },
+  { id: "1", name: "지우", emoji: "👧", age: "6세", gender: "female" },
+  { id: "2", name: "도윤", emoji: "👦", age: "4세", gender: "male" },
 ];
 
 const badges = [
@@ -45,13 +47,22 @@ const toneStyle = (t: "ok" | "warn") =>
     ? "bg-accent/10 text-accent border-accent/20"
     : "bg-muted text-foreground border-border";
 
-// Render text with **keyword** as accent-colored bold
-const renderBold = (text: string) => {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+// Render text with:
+//   __word__  → environment keyword (red/accent + bold)
+//   **word**  → recommended item (black + bold)
+const renderRich = (text: string) => {
+  const parts = text.split(/(\*\*[^*]+\*\*|__[^_]+__)/g);
   return parts.map((p, i) => {
-    if (/^\*\*[^*]+\*\*$/.test(p)) {
+    if (/^__[^_]+__$/.test(p)) {
       return (
         <b key={i} className="font-bold text-accent">
+          {p.slice(2, -2)}
+        </b>
+      );
+    }
+    if (/^\*\*[^*]+\*\*$/.test(p)) {
+      return (
+        <b key={i} className="font-bold text-foreground">
           {p.slice(2, -2)}
         </b>
       );
@@ -61,7 +72,7 @@ const renderBold = (text: string) => {
 };
 
 const aiMessage = (name: string) =>
-  `${name}는 오늘 **꽃가루**가 많고 오후엔 **바람**이 강해요. 비염이 있으니 **마스크**와 **목수건**을 꼭 챙겨주세요. 건조하니 **보습제**도 발라주세요.`;
+  `${name}는 오늘 __꽃가루 많음__이고 오후엔 __바람 강함__이에요. 비염이 있으니 **마스크**와 **목수건**을 꼭 챙겨주세요. __건조함__에 대비해 **보습제**도 발라주세요.`;
 
 const navItems = [
   { icon: "🏠", label: "홈", to: "/home" },
@@ -185,7 +196,7 @@ const Home = () => {
                 <div className="flex-1">
                   <p className="text-xs font-medium text-accent">AI 리포트 · 오늘 아침</p>
                   <p className="mt-1 leading-relaxed text-foreground">
-                    {renderBold(message)}
+                    {renderRich(message)}
                   </p>
                 </div>
               </div>
@@ -267,16 +278,24 @@ const Home = () => {
                         <span className="text-xs text-muted-foreground">체감 {t.feels}°</span>
                       </div>
                       <dl className="mt-3 space-y-1 text-xs">
-                        {[
-                          ["미세먼지", t.dust],
-                          ["자외선", t.uv],
-                          ["꽃가루", t.pollen],
-                          ["습도", `${t.humidity}%`],
-                          ["바람", t.wind],
-                        ].map(([k, v]) => (
+                        {([
+                          ["미세먼지", t.dust, ["나쁨", "매우나쁨"].includes(t.dust)],
+                          ["자외선", t.uv, ["강함", "매우강함"].includes(t.uv)],
+                          ["꽃가루", t.pollen, ["높음", "매우높음"].includes(t.pollen)],
+                          ["습도", `${t.humidity}%`, t.humidity <= 40],
+                          ["바람", t.wind, t.wind === "강함"],
+                        ] as [string, string, boolean][]).map(([k, v, bad]) => (
                           <div key={k} className="flex items-center justify-between">
                             <dt className="text-muted-foreground">{k}</dt>
-                            <dd className="font-medium text-foreground">{v}</dd>
+                            <dd
+                              className={
+                                bad
+                                  ? "font-bold text-accent"
+                                  : "font-medium text-foreground"
+                              }
+                            >
+                              {v}
+                            </dd>
                           </div>
                         ))}
                       </dl>
@@ -285,9 +304,16 @@ const Home = () => {
             </div>
           </section>
 
+          {/* Character-based personalized report */}
+          {!loading && (
+            <CharacterReport gender={cur.gender} childName={cur.name} />
+          )}
+
           {/* Recommended items */}
           <section className="mt-7">
-            <h2 className="text-base font-bold tracking-tight">오늘의 추천 아이템</h2>
+            <h2 className="text-base font-bold tracking-tight">
+              {cur.name}이를 위한 오늘의 추천 아이템
+            </h2>
             <div className="mt-3 -mx-5 flex gap-3 overflow-x-auto px-5 pb-1 scrollbar-hide">
               {loading
                 ? Array.from({ length: 3 }).map((_, i) => (

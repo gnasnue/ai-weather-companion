@@ -47,13 +47,22 @@ const toneStyle = (t: "ok" | "warn") =>
     ? "bg-accent/10 text-accent border-accent/20"
     : "bg-muted text-foreground border-border";
 
-// Render text with **keyword** as accent-colored bold
-const renderBold = (text: string) => {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+// Render text with:
+//   __word__  → environment keyword (red/accent + bold)
+//   **word**  → recommended item (black + bold)
+const renderRich = (text: string) => {
+  const parts = text.split(/(\*\*[^*]+\*\*|__[^_]+__)/g);
   return parts.map((p, i) => {
-    if (/^\*\*[^*]+\*\*$/.test(p)) {
+    if (/^__[^_]+__$/.test(p)) {
       return (
         <b key={i} className="font-bold text-accent">
+          {p.slice(2, -2)}
+        </b>
+      );
+    }
+    if (/^\*\*[^*]+\*\*$/.test(p)) {
+      return (
+        <b key={i} className="font-bold text-foreground">
           {p.slice(2, -2)}
         </b>
       );
@@ -63,7 +72,7 @@ const renderBold = (text: string) => {
 };
 
 const aiMessage = (name: string) =>
-  `${name}는 오늘 **꽃가루**가 많고 오후엔 **바람**이 강해요. 비염이 있으니 **마스크**와 **목수건**을 꼭 챙겨주세요. 건조하니 **보습제**도 발라주세요.`;
+  `${name}는 오늘 __꽃가루 많음__이고 오후엔 __바람 강함__이에요. 비염이 있으니 **마스크**와 **목수건**을 꼭 챙겨주세요. __건조함__에 대비해 **보습제**도 발라주세요.`;
 
 const navItems = [
   { icon: "🏠", label: "홈", to: "/home" },

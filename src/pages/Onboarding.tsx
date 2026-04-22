@@ -13,11 +13,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import {
+  ChildProfile,
+  calcAge,
+  genderToEmoji,
+  koreanGenderToCode,
+  saveProfile,
+} from "@/lib/profile";
 
 const TOTAL = 7;
 const STORAGE_KEY = "aiweather:onboarding";
 
-const conditions = ["아토피", "비염", "식품 알러지", "환경 알러지", "천식", "해당없음", "기타"];
+const conditions = [
+  "호흡기 민감 (비염, 천식·기관지)",
+  "알레르기 체질 (꽃가루·먼지)",
+  "민감 피부 (아토피·건조·자외선)",
+  "체온조절 취약 (더위·추위)",
+  "해당없음",
+  "기타",
+];
 
 const sensitivity = [
   { v: "very-much", l: "매우 많이 탐" },

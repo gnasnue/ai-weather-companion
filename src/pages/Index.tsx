@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 const features = [
   { icon: "🌤️", title: "통합 환경 정보", desc: "날씨, 미세먼지, 꽃가루, 자외선을 한눈에" },
   { icon: "👶", title: "아이 맞춤 AI 리포트", desc: "우리 아이 체질에 맞게 매일 아침 분석" },
-  { icon: "👕", title: "시간대별 옷차림 가이드", desc: "등원부터 저녁 산책까지 시간대별 안내" },
+  { icon: "👕", title: "시간대별 코디 가이드", desc: "등원부터 저녁 산책까지 시간대별 안내" },
   { icon: "🔔", title: "스마트 알림", desc: "자기 전, 등원 준비 전 맞춤 정보 알림" },
 ];
 
@@ -54,15 +54,15 @@ const Index = () => {
         <section className="bg-secondary">
           <div className="container-mobile py-12 text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-background/70 px-3 py-1 text-xs font-medium text-accent shadow-soft">
-              ✨ 바쁜 엄마아빠를 위한 AI 육아 비서
+              ✨ AI 환경 비서
             </span>
-            <h1 className="mt-5 text-2xl font-bold leading-tight tracking-tight text-foreground">
+            <h1 className="mt-5 text-2xl font-bold leading-tight tracking-tight text-foreground break-keep">
               오늘 우리 아이에게<br />뭘 입혀야 할지,<br />
               <span className="text-accent">AI가 알려드려요</span>
             </h1>
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground break-keep">
               날씨, 미세먼지, 꽃가루, 자외선까지.<br />
-              아이 체질에 맞게 매일 리포트를 보내드려요.
+              아이 체질에 맞게 매일 아침 리포트를 보내드려요.
             </p>
             <div className="mt-7 flex flex-col items-center gap-3">
               <Link to="/signup" className="w-full">
@@ -87,14 +87,14 @@ const Index = () => {
               {pains.map((p, i) => (
                 <div key={i} className="rounded-2xl border border-border bg-card p-6 shadow-soft text-center flex flex-col items-center">
                   <div className="text-3xl">{p.emoji}</div>
-                  <p className="mt-3 text-sm font-medium leading-relaxed text-foreground">{p.text}</p>
+                  <p className="mt-3 text-sm font-medium leading-relaxed text-foreground break-keep">{p.text}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Differentiators - 정렬 수정 완료 */}
+        {/* Differentiators */}
         <section className="bg-soft py-12">
           <div className="container-mobile">
             <h2 className="text-center text-xl font-bold tracking-tight">
@@ -102,17 +102,17 @@ const Index = () => {
             </h2>
             <div className="mt-6 space-y-3">
               {diffs.map((d) => (
-                <div key={d.title} className="rounded-2xl bg-background p-6 shadow-soft text-center flex flex-col items-center justify-center">
+                <div key={d.title} className="rounded-2xl bg-background p-6 shadow-soft text-center flex flex-col items-center">
                   <div className="text-2xl">{d.icon}</div>
-                  <h3 className="mt-3 text-base font-semibold">{d.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{d.desc}</p>
+                  <h3 className="mt-3 text-base font-semibold break-keep">{d.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground break-keep">{d.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Features - 정렬 수정 완료 */}
+        {/* Features */}
         <section className="py-12">
           <div className="container-mobile">
             <h2 className="text-center text-xl font-bold tracking-tight">
@@ -120,28 +120,37 @@ const Index = () => {
             </h2>
             <div className="mt-6 grid grid-cols-2 gap-3">
               {features.map((f) => (
-                <div key={f.title} className="rounded-2xl border border-border bg-card p-4 transition-smooth hover:border-primary hover:shadow-card text-center flex flex-col items-center justify-center">
+                <div key={f.title} className="rounded-2xl border border-border bg-card p-4 text-center flex flex-col items-center justify-center">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary text-2xl mb-3">{f.icon}</div>
-                  <h3 className="text-sm font-semibold leading-snug">{f.title}</h3>
-                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{f.desc}</p>
+                  <h3 className="text-sm font-semibold leading-snug break-keep">{f.title}</h3>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground break-keep">{f.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Reviews */}
+        {/* Reviews - 정렬 레이아웃 대폭 수정 */}
         <section className="bg-secondary py-12">
           <div className="container-mobile">
             <h2 className="text-center text-xl font-bold tracking-tight">
               부모님들의 이야기
             </h2>
-            <div className="mt-6 space-y-3">
+            <div className="mt-6 space-y-4">
               {reviews.map((r, i) => (
-                <div key={i} className="rounded-2xl bg-background p-4 shadow-soft text-center flex flex-col items-center">
-                  <div className="text-2xl text-primary leading-none">"</div>
-                  <p className="text-sm leading-relaxed text-foreground">{r.text}</p>
-                  <p className="mt-3 text-xs text-muted-foreground">— {r.who}</p>
+                <div key={i} className="rounded-2xl bg-background p-6 shadow-soft flex flex-col">
+                  {/* 1. 따옴표 왼쪽 정렬 */}
+                  <div className="text-2xl text-primary font-serif self-start mb-1">"</div>
+                  
+                  {/* 2. 본문 가운데 정렬 + 의미 단위 줄바꿈 */}
+                  <p className="text-sm leading-relaxed text-foreground text-center break-keep px-2">
+                    {r.text}
+                  </p>
+                  
+                  {/* 3. 작성자 오른쪽 정렬 */}
+                  <p className="mt-4 text-xs text-muted-foreground self-end">
+                    — {r.who}
+                  </p>
                 </div>
               ))}
             </div>
@@ -151,10 +160,10 @@ const Index = () => {
         {/* CTA */}
         <section className="bg-primary">
           <div className="container-mobile py-12 text-center">
-            <h2 className="text-xl font-bold tracking-tight text-primary-foreground">
+            <h2 className="text-xl font-bold tracking-tight text-primary-foreground break-keep">
               오늘부터 아이웨더가<br />대신 챙겨드릴게요
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-primary-foreground/90">
+            <p className="mt-3 text-sm leading-relaxed text-primary-foreground/90 break-keep">
               매일 아침 바쁜 엄마 아빠 곁에서,<br />
               우리 아이의 하루를 함께 준비합니다.
             </p>
@@ -168,10 +177,8 @@ const Index = () => {
 
         {/* Footer */}
         <footer className="border-t border-border bg-background">
-          <div className="container-mobile py-8 text-center">
-            <div className="flex justify-center mb-4">
-               <Logo />
-            </div>
+          <div className="container-mobile py-8 text-center flex flex-col items-center">
+            <Logo />
             <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
               <a href="#" className="hover:text-foreground">이용약관</a>
               <a href="#" className="hover:text-foreground">개인정보처리방침</a>

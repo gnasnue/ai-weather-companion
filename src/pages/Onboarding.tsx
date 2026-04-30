@@ -15,6 +15,8 @@ import {
 import { toast } from "sonner";
 import {
   ChildProfile,
+  AlertSettings,
+  defaultAlerts,
   calcAge,
   genderToEmoji,
   koreanGenderToCode,
@@ -39,6 +41,7 @@ const sensitivity = [
   { v: "less", l: "조금 덜 탐" },
   { v: "very-less", l: "매우 덜 탐" },
 ];
+
 const sweatLevels = [
   { v: "very-much", l: "매우 많음" },
   { v: "much", l: "조금 많음" },
@@ -46,7 +49,6 @@ const sweatLevels = [
   { v: "less", l: "적은 편" },
 ];
 
-// time options every 30 min
 const halfHour = (from: number, to: number) => {
   const out: string[] = [];
   for (let h = from; h <= to; h++) {
@@ -73,10 +75,13 @@ type State = {
   leaveSchool: string;
   eveningStart: string;
   eveningEnd: string;
-  notif: { night: boolean; morning: boolean; summary: boolean };
+  notif: {
+    night: boolean;
+    morning: boolean;
+    alerts: AlertSettings;
+  };
   nightTime: string;
   morningBefore: string;
-  summaryTime: string;
 };
 
 const defaultState: State = {
@@ -96,10 +101,13 @@ const defaultState: State = {
   leaveSchool: "",
   eveningStart: "",
   eveningEnd: "",
-  notif: { night: true, morning: true, summary: false },
+  notif: {
+    night: true,
+    morning: true,
+    alerts: defaultAlerts,
+  },
   nightTime: "21:00",
   morningBefore: "30",
-  summaryTime: "20:00",
 };
 
 const Onboarding = () => {
@@ -108,7 +116,6 @@ const Onboarding = () => {
   const [done, setDone] = useState(false);
   const [s, setS] = useState<State>(defaultState);
 
-  // Resume previous progress
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -120,7 +127,6 @@ const Onboarding = () => {
     } catch {}
   }, []);
 
-  // Auto save
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ s, step }));
@@ -157,7 +163,6 @@ const Onboarding = () => {
         ...s.notif,
         nightTime: s.nightTime,
         morningBefore: s.morningBefore,
-        summaryTime: s.summaryTime,
       },
       createdAt: Date.now(),
     };
@@ -180,6 +185,7 @@ const Onboarding = () => {
       setDone(true);
     }
   };
+
   const prev = () => (step > 1 ? setStep(step - 1) : navigate(-1));
   const saveLater = () => {
     toast.success("진행 상태가 저장됐어요. 나중에 이어서 할 수 있어요.");
@@ -236,7 +242,7 @@ const Onboarding = () => {
             <SelectTrigger className="h-12"><SelectValue placeholder="년" /></SelectTrigger>
             <SelectContent>
               {Array.from({ length: 10 }).map((_, i) => {
-                const y = 2025 - i;
+                const y = 2026 - i;
                 return <SelectItem key={y} value={String(y)}>{y}년</SelectItem>;
               })}
             </SelectContent>
@@ -294,22 +300,20 @@ const Onboarding = () => {
       hint: "해당 항목이 있으면 관련 환경 지표를 더 꼼꼼히 알려드려요",
       node: (
         <div className="space-y-2">
-          <div className="space-y-2">
-            {conditions.map((c) => {
-              const on = s.conds.includes(c);
-              return (
-                <label
-                  key={c}
-                  className={`flex min-h-12 cursor-pointer items-center gap-2.5 rounded-xl border-2 px-3.5 py-2.5 transition-smooth ${
-                    on ? "border-primary bg-secondary" : "border-border bg-card hover:border-primary/40"
-                  }`}
-                >
-                  <Checkbox checked={on} onCheckedChange={() => toggleCond(c)} />
-                  <span className="text-sm leading-snug">{c}</span>
-                </label>
-              );
-            })}
-          </div>
+          {conditions.map((c) => {
+            const on = s.conds.includes(c);
+            return (
+              <label
+                key={c}
+                className={`flex min-h-12 cursor-pointer items-center gap-2.5 rounded-xl border-2 px-3.5 py-2.5 transition-smooth ${
+                  on ? "border-primary bg-secondary" : "border-border bg-card hover:border-primary/40"
+                }`}
+              >
+                <Checkbox checked={on} onCheckedChange={() => toggleCond(c)} />
+                <span className="text-sm leading-snug">{c}</span>
+              </label>
+            );
+          })}
           {s.conds.includes("기타") && (
             <Input
               value={s.condEtc}
@@ -426,12 +430,14 @@ const Onboarding = () => {
             💬 카카오톡 알림 연동
           </button>
 
-          {/* Night */}
+          {/* 전날 밤 알림 */}
           <div className="rounded-xl border border-border bg-card p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium">🌙 전날 밤 알림</p>
-                <p className="text-xs text-muted-foreground">내일 날씨를 미리 알려드려요</p>
+                <p className="text-xs text-muted-foreground">
+                  내일을 미리 준비할 수 있도록 예보 기반 정보를 전날 밤에 알려드려요
+                </p>
               </div>
               <Switch
                 checked={s.notif.night}
@@ -450,12 +456,14 @@ const Onboarding = () => {
             )}
           </div>
 
-          {/* Morning */}
+          {/* 당일 아침 알림 */}
           <div className="rounded-xl border border-border bg-card p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium">🌅 당일 아침 알림</p>
-                <p className="text-xs text-muted-foreground">등원 전 옷차림 가이드</p>
+                <p className="text-xs text-muted-foreground">
+                  당일 실시간 관측 데이터 기반으로 등원 준비 전에 알려드려요
+                </p>
               </div>
               <Switch
                 checked={s.notif.morning}
@@ -476,28 +484,98 @@ const Onboarding = () => {
             )}
           </div>
 
-          {/* Summary */}
+          {/* 상황별 환경 경보 알림 */}
           <div className="rounded-xl border border-border bg-card p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">📋 하루 요약 알림</p>
-                <p className="text-xs text-muted-foreground">저녁에 하루 환경을 정리</p>
-              </div>
-              <Switch
-                checked={s.notif.summary}
-                onCheckedChange={(v) => update({ notif: { ...s.notif, summary: v } })}
-              />
+            <p className="font-medium">⚠️ 상황별 환경 경보 알림</p>
+            <p className="mt-0.5 mb-3 text-xs text-muted-foreground">
+              아래 환경 조건 충족 시 즉시 알림을 보내드려요. 중복 선택 가능해요
+            </p>
+            <div className="space-y-2">
+              {(
+                [
+                  {
+                    key: "aiWarning" as const,
+                    icon: "🤖",
+                    label: "AI 종합 환경지수 '주의' 이상",
+                    desc: "기상·대기·꽃가루 등 종합 분석 결과 위험 수준 도달 시",
+                    recommended: true,
+                  },
+                  {
+                    key: "tempDiff" as const,
+                    icon: "🌡️",
+                    label: "일교차 10°C 이상",
+                    desc: "아침·낮 기온 편차가 10°C를 초과하는 경우",
+                  },
+                  {
+                    key: "dustBad" as const,
+                    icon: "😷",
+                    label: "초미세먼지(PM2.5) '나쁨' 이상",
+                    desc: "PM2.5 농도 35㎍/㎥ 초과 시",
+                  },
+                  {
+                    key: "pollen" as const,
+                    icon: "🌳",
+                    label: "꽃가루 농도 '주의' 이상",
+                    desc: "수목·초본류 꽃가루 농도 주의 단계 이상 시",
+                  },
+                  {
+                    key: "dryness" as const,
+                    icon: "💧",
+                    label: "건조주의보 발령",
+                    desc: "상대습도 35% 미만 또는 기상청 건조주의보 발효 시",
+                  },
+                  {
+                    key: "uvHigh" as const,
+                    icon: "☀️",
+                    label: "자외선지수 '높음' 이상",
+                    desc: "UV 지수 6 이상, 영유아 피부·안구 노출 주의 수준",
+                  },
+                ] as {
+                  key: keyof AlertSettings;
+                  icon: string;
+                  label: string;
+                  desc: string;
+                  recommended?: boolean;
+                }[]
+              ).map(({ key, icon, label, desc, recommended }) => {
+                const isOn = s.notif.alerts[key];
+                return (
+                  <label
+                    key={key}
+                    className={`flex cursor-pointer items-start gap-3 rounded-xl border-2 px-3.5 py-3 transition-smooth ${
+                      isOn
+                        ? "border-primary bg-secondary"
+                        : "border-border bg-background hover:border-primary/40"
+                    }`}
+                  >
+                    <Checkbox
+                      checked={isOn}
+                      onCheckedChange={(v) =>
+                        update({
+                          notif: {
+                            ...s.notif,
+                            alerts: { ...s.notif.alerts, [key]: !!v },
+                          },
+                        })
+                      }
+                      className="mt-0.5 shrink-0"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-1.5">
+                        <span>{icon}</span>
+                        <span className="text-sm font-medium text-foreground">{label}</span>
+                        {recommended && (
+                          <span className="rounded-full bg-primary/15 px-1.5 py-0.5 text-[10px] font-semibold text-accent">
+                            추천
+                          </span>
+                        )}
+                      </div>
+                      <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{desc}</p>
+                    </div>
+                  </label>
+                );
+              })}
             </div>
-            {s.notif.summary && (
-              <div className="mt-3">
-                <Select value={s.summaryTime} onValueChange={(v) => update({ summaryTime: v })}>
-                  <SelectTrigger className="h-11"><SelectValue placeholder="시간" /></SelectTrigger>
-                  <SelectContent>
-                    {halfHour(19, 22).map((t) => (<SelectItem key={t} value={t}>{t}</SelectItem>))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
           </div>
         </div>
       ),
@@ -509,10 +587,13 @@ const Onboarding = () => {
   return (
     <div className="page-shell">
       <div className="page-frame flex flex-col">
-        {/* Top bar */}
         <header className="border-b border-border/60">
           <div className="container-mobile flex h-14 items-center justify-between">
-            <button onClick={prev} className="-ml-2 rounded-full p-2 text-foreground hover:bg-muted" aria-label="뒤로가기">
+            <button
+              onClick={prev}
+              className="-ml-2 rounded-full p-2 text-foreground hover:bg-muted"
+              aria-label="뒤로가기"
+            >
               <ArrowLeft className="h-5 w-5" />
             </button>
             <button onClick={saveLater} className="text-xs text-muted-foreground hover:text-foreground">
@@ -555,7 +636,10 @@ const Onboarding = () => {
             >
               {step === TOTAL ? "완료" : "다음"}
             </Button>
-            <Link to="/home" className="mt-3 block text-center text-xs text-muted-foreground hover:text-foreground">
+            <Link
+              to="/home"
+              className="mt-3 block text-center text-xs text-muted-foreground hover:text-foreground"
+            >
               먼저 둘러볼게요
             </Link>
           </div>

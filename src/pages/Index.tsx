@@ -20,7 +20,7 @@ const diffs = [
   { icon: "👶", title: "내 아이만을 위한 맞춤 정보", desc: "아이 체질과 건강 정보를 기반으로 꼭 필요한 정보만 골라드려요" },
   { icon: "⏰", title: "시간대별 날씨 정보", desc: "등원, 야외활동, 하원, 저녁 산책까지 시간대별로 미리 확인하세요" },
   { icon: "🤖", title: "엄마 아빠를 위한 AI 비서", desc: "흩어진 정보를 대신 모아 분석까지, AI가 알아서 다 알려드려요" },
-  { icon: "🎓", title: "전문 학회 데이터 기반", desc: "대한소아과학회 등 전문 기관 자료를 근거로 해요" },
+  { icon: "🔬", title: "전문 학회 데이터 기반", desc: "대한소아과학회 등 전문 기관 자료를 근거로 해요" },
 ];
 
 const reviews = [
@@ -54,7 +54,7 @@ const Index = () => {
         <section className="bg-secondary">
           <div className="container-mobile py-12 text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-background/70 px-3 py-1 text-xs font-medium text-accent shadow-soft">
-              ✨ AI 환경 비서
+              ✨ 바쁜 엄마아빠를 위한 AI 육아 비서
             </span>
             <h1 className="mt-5 text-2xl font-bold leading-tight tracking-tight text-foreground">
               오늘 우리 아이에게<br />뭘 입혀야 할지,<br />
@@ -62,7 +62,7 @@ const Index = () => {
             </h1>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               날씨, 미세먼지, 꽃가루, 자외선까지.<br />
-              아이 체질에 맞게 매일 아침 리포트를 보내드려요.
+              아이 체질에 맞게 매일 리포트를 보내드려요.
             </p>
             <div className="mt-7 flex flex-col items-center gap-3">
               <Link to="/signup" className="w-full">
@@ -85,7 +85,7 @@ const Index = () => {
             </h2>
             <div className="mt-6 space-y-3">
               {pains.map((p, i) => (
-                <div key={i} className="rounded-2xl border border-border bg-card p-6 shadow-soft text-center">
+                <div key={i} className="rounded-2xl border border-border bg-card p-6 shadow-soft text-center flex flex-col items-center">
                   <div className="text-3xl">{p.emoji}</div>
                   <p className="mt-3 text-sm font-medium leading-relaxed text-foreground">{p.text}</p>
                 </div>
@@ -94,7 +94,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Differentiators - 수정됨: flex-col items-center 및 text-center 추가 */}
+        {/* Differentiators - 정렬 수정 완료 */}
         <section className="bg-soft py-12">
           <div className="container-mobile">
             <h2 className="text-center text-xl font-bold tracking-tight">
@@ -102,17 +102,17 @@ const Index = () => {
             </h2>
             <div className="mt-6 space-y-3">
               {diffs.map((d) => (
-                <div key={d.title} className="flex flex-col items-center text-center rounded-2xl bg-background p-6 shadow-soft">
+                <div key={d.title} className="rounded-2xl bg-background p-6 shadow-soft text-center flex flex-col items-center justify-center">
                   <div className="text-2xl">{d.icon}</div>
-                  <h3 className="mt-2 text-base font-semibold">{d.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{d.desc}</p>
+                  <h3 className="mt-3 text-base font-semibold">{d.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{d.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Features - 수정됨: flex-col items-center 추가 */}
+        {/* Features - 정렬 수정 완료 */}
         <section className="py-12">
           <div className="container-mobile">
             <h2 className="text-center text-xl font-bold tracking-tight">
@@ -120,9 +120,9 @@ const Index = () => {
             </h2>
             <div className="mt-6 grid grid-cols-2 gap-3">
               {features.map((f) => (
-                <div key={f.title} className="flex flex-col items-center text-center rounded-2xl border border-border bg-card p-4 transition-smooth hover:border-primary hover:shadow-card">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-xl">{f.icon}</div>
-                  <h3 className="mt-3 text-sm font-semibold leading-snug">{f.title}</h3>
+                <div key={f.title} className="rounded-2xl border border-border bg-card p-4 transition-smooth hover:border-primary hover:shadow-card text-center flex flex-col items-center justify-center">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary text-2xl mb-3">{f.icon}</div>
+                  <h3 className="text-sm font-semibold leading-snug">{f.title}</h3>
                   <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{f.desc}</p>
                 </div>
               ))}
@@ -138,7 +138,7 @@ const Index = () => {
             </h2>
             <div className="mt-6 space-y-3">
               {reviews.map((r, i) => (
-                <div key={i} className="rounded-2xl bg-background p-4 shadow-soft">
+                <div key={i} className="rounded-2xl bg-background p-4 shadow-soft text-center flex flex-col items-center">
                   <div className="text-2xl text-primary leading-none">"</div>
                   <p className="text-sm leading-relaxed text-foreground">{r.text}</p>
                   <p className="mt-3 text-xs text-muted-foreground">— {r.who}</p>
@@ -168,9 +168,11 @@ const Index = () => {
 
         {/* Footer */}
         <footer className="border-t border-border bg-background">
-          <div className="container-mobile py-8">
-            <Logo />
-            <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
+          <div className="container-mobile py-8 text-center">
+            <div className="flex justify-center mb-4">
+               <Logo />
+            </div>
+            <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
               <a href="#" className="hover:text-foreground">이용약관</a>
               <a href="#" className="hover:text-foreground">개인정보처리방침</a>
               <a href="mailto:hello@aiweather.app" className="hover:text-foreground">hello@aiweather.app</a>

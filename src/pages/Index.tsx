@@ -9,18 +9,19 @@ const features = [
   { icon: "🔔", title: "스마트 알림", desc: "자기 전, 등원 준비 전 맞춤 정보 알림" },
 ];
 
+// 1. 이모지를 각 문구와 짝지어 객체 형태로 수정했습니다.
 const pains = [
-  "날씨 앱, 미세먼지 앱, 꽃가루, 자외선 정보… 따로따로 확인하기 너무 번거로워요",
-  "일교차가 심한 날 아이 옷차림을 어떻게 해야 할지 매번 헷갈려요",
-  "바쁜 아침에 이것저것 고민하고 챙길 시간이 없어요",
-  "비염, 아토피, 감기에 잘 걸리는 아이… 민감한 우리 아이 체질에 맞는 꼼꼼한 케어 가이드가 필요해요",
+  { emoji: "😵‍💫", text: "날씨 앱, 미세먼지 앱, 꽃가루, 자외선 정보… 따로따로 확인하기 너무 번거로워요" },
+  { emoji: "🤔", text: "일교차가 심한 날 아이 옷차림을 어떻게 해야 할지 매번 헷갈려요" },
+  { emoji: "🤯", text: "바쁜 아침에 이것저것 고민하고 챙길 시간이 없어요" },
+  { emoji: "🤒", text: "비염, 아토피, 감기에 잘 걸리는 아이… 민감한 우리 아이 체질에 맞는 꼼꼼한 케어 가이드가 필요해요" },
 ];
 
 const diffs = [
   { icon: "👶", title: "내 아이만을 위한 맞춤 정보", desc: "아이 체질과 건강 정보를 기반으로 꼭 필요한 정보만 골라드려요" },
   { icon: "⏰", title: "시간대별 날씨 정보", desc: "등원, 야외활동, 하원, 저녁 산책까지 시간대별로 미리 확인하세요" },
   { icon: "🤖", title: "엄마 아빠를 위한 AI 비서", desc: "흩어진 정보를 대신 모아 분석까지, AI가 알아서 다 알려드려요" },
-  { icon: "🔬", title: "전문 학회 데이터 기반", desc: "대한소아과학회 등 전문 기관 자료를 근거로 해요" },
+  { icon: "🎓", title: "전문 학회 데이터 기반", desc: "대한소아과학회 등 전문 기관 자료를 근거로 해요" },
 ];
 
 const reviews = [
@@ -85,9 +86,11 @@ const Index = () => {
             </h2>
             <div className="mt-6 space-y-3">
               {pains.map((p, i) => (
-                <div key={i} className="rounded-2xl border border-border bg-card p-4 shadow-soft">
-                  <div className="text-2xl">😩</div>
-                  <p className="mt-2 text-sm leading-relaxed text-foreground">{p}</p>
+                /* 2. text-center를 추가하여 카드 내부의 모든 내용을 가운데 정렬했습니다. */
+                <div key={i} className="rounded-2xl border border-border bg-card p-6 shadow-soft text-center">
+                  {/* 각 데이터 리스트에 정의한 이모지를 불러옵니다. */}
+                  <div className="text-3xl">{p.emoji}</div>
+                  <p className="mt-3 text-sm font-medium leading-relaxed text-foreground">{p.text}</p>
                 </div>
               ))}
             </div>

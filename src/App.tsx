@@ -8,6 +8,7 @@ import Signup from "./pages/Signup.tsx";
 import Onboarding from "./pages/Onboarding.tsx";
 import Home from "./pages/Home.tsx";
 import Environment from "./pages/Environment.tsx";
+import Tips from "./pages/Tips.tsx";
 import My from "./pages/My.tsx";
 import NotFound from "./pages/NotFound.tsx";
 

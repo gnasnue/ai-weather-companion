@@ -359,7 +359,7 @@ const Home = () => {
               {navItems.map((n) => {
                 const isActive = location.pathname === n.to;
                 const handleClick = (e: React.MouseEvent) => {
-                  if (!["/home", "/me", "/env", "/tips"].includes(n.to)) {
+                  if (!["/home", "/me", "/env", "/tips", "/outfit"].includes(n.to)) {
                     e.preventDefault();
                     toast(`${n.label} 페이지는 준비 중이에요`);
                   }

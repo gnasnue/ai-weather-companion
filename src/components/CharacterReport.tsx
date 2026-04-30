@@ -4,7 +4,7 @@ type Gender = "male" | "female" | "unknown";
 
 type Callout = {
   id: string;
-  zone: "head" | "neck" | "skin" | "outfit";
+  zone: "face" | "neck" | "skin" | "outfit";
   title: string;
   desc: string;
   emoji: string;
@@ -13,8 +13,8 @@ type Callout = {
 
 const calloutsData: Callout[] = [
   {
-    id: "head",
-    zone: "head",
+    id: "face",
+    zone: "face",
     title: "꽃가루 많음",
     desc: "마스크 챙기기",
     emoji: "😷",
@@ -46,8 +46,6 @@ const calloutsData: Callout[] = [
   },
 ];
 
-// 기존 Character 컴포넌트 (SVG) 전체 삭제하고 아래로 교체
-
 const Character = ({ gender }: { gender: Gender }) => {
   const src = gender === "female"
     ? "/images/character-girl.png"
@@ -62,20 +60,28 @@ const Character = ({ gender }: { gender: Gender }) => {
   );
 };
 
-// Position of each callout's anchor point on the character (in % of container)
+// 신체 부위 앵커 좌표 (SVG viewBox 340x420 기준, px)
 const anchors: Record<Callout["zone"], { x: number; y: number }> = {
-  head: { x: 50, y: 18 },
-  neck: { x: 50, y: 36 },
-  skin: { x: 38, y: 52 },
-  outfit: { x: 62, y: 58 },
+  face:   { x: 185, y: 108 }, // 얼굴 입 주변
+  neck:   { x: 155, y: 168 }, // 목 부위
+  skin:   { x: 118, y: 255 }, // 왼팔/손목
+  outfit: { x: 218, y: 230 }, // 상의 오른쪽
 };
 
-// Position of the callout box itself
+// 콜아웃 박스 끝점 좌표 (SVG viewBox 340x420 기준, px)
+const lineEnds: Record<Callout["zone"], { x: number; y: number }> = {
+  face:   { x: 272, y: 88 },
+  neck:   { x: 72,  y: 185 },
+  skin:   { x: 68,  y: 290 },
+  outfit: { x: 272, y: 258 },
+};
+
+// 콜아웃 박스 CSS 위치
 const boxPositions: Record<Callout["zone"], string> = {
-  head: "top-0 right-0",
-  neck: "top-[28%] left-0",
-  skin: "top-[48%] left-0",
-  outfit: "top-[52%] right-0",
+  face:   "top-[12%] right-0",
+  neck:   "top-[36%] left-0",
+  skin:   "top-[60%] left-0",
+  outfit: "top-[54%] right-0",
 };
 
 const CharacterReport = ({
@@ -95,43 +101,45 @@ const CharacterReport = ({
       </div>
 
       <div className="mt-3 rounded-2xl border border-border bg-card p-4 shadow-soft">
-        <div className="relative mx-auto h-[340px] w-full max-w-[340px]">
-          {/* Character centered */}
-          <div className="absolute left-1/2 top-1/2 h-[300px] -translate-x-1/2 -translate-y-1/2">
+        <div className="relative mx-auto h-[420px] w-full max-w-[340px]">
+
+          {/* 캐릭터 이미지 */}
+          <div className="absolute left-1/2 top-1/2 h-[380px] -translate-x-1/2 -translate-y-1/2">
             <Character gender={gender} />
           </div>
 
-          {/* SVG connector lines */}
+          {/* SVG 커넥터 라인 */}
           <svg
             className="pointer-events-none absolute inset-0 h-full w-full"
-            viewBox="0 0 100 100"
+            viewBox="0 0 340 420"
             preserveAspectRatio="none"
           >
             {calloutsData.map((c) => {
               const a = anchors[c.zone];
-              const ends: Record<Callout["zone"], { x: number; y: number }> = {
-                head: { x: 78, y: 8 },
-                neck: { x: 22, y: 32 },
-                skin: { x: 22, y: 56 },
-                outfit: { x: 78, y: 56 },
-              };
-              const e = ends[c.zone];
+              const e = lineEnds[c.zone];
               return (
-                <line
-                  key={c.id}
-                  x1={a.x}
-                  y1={a.y}
-                  x2={e.x}
-                  y2={e.y}
-                  stroke="hsl(var(--border))"
-                  strokeWidth="0.4"
-                  vectorEffect="non-scaling-stroke"
-                />
+                <g key={c.id}>
+                  <line
+                    x1={a.x} y1={a.y}
+                    x2={e.x} y2={e.y}
+                    stroke="#D3D1C7"
+                    strokeWidth="0.8"
+                    strokeDasharray="3,2"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                  <circle
+                    cx={a.x} cy={a.y} r="3"
+                    fill="white"
+                    stroke="#B4B2A9"
+                    strokeWidth="1"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                </g>
               );
             })}
           </svg>
 
-          {/* Callouts */}
+          {/* 콜아웃 박스 */}
           {calloutsData.map((c) => (
             <div
               key={c.id}
@@ -160,6 +168,7 @@ const CharacterReport = ({
               </div>
             </div>
           ))}
+
         </div>
       </div>
     </section>

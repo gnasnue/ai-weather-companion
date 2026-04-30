@@ -54,7 +54,7 @@ const Index = () => {
         <section className="bg-secondary">
           <div className="container-mobile py-12 text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-background/70 px-3 py-1 text-xs font-medium text-accent shadow-soft">
-              ✨ AI 환경 비서
+              ✨ 바쁜 엄마아빠를 위한 AI 육아 비서
             </span>
             <h1 className="mt-5 text-2xl font-bold leading-tight tracking-tight text-foreground break-keep">
               오늘 우리 아이에게<br />뭘 입혀야 할지,<br />

@@ -1,6 +1,14 @@
 // Shared profile storage helpers for AI-Weather
-
 export type Gender = "male" | "female" | "unknown";
+
+export type AlertSettings = {
+  aiWarning: boolean;   // AI 종합 환경지수 '주의' 이상
+  tempDiff: boolean;    // 일교차 10°C 이상
+  dustBad: boolean;     // 초미세먼지(PM2.5) '나쁨' 이상
+  pollen: boolean;      // 꽃가루 농도 '주의' 이상
+  dryness: boolean;     // 건조주의보 발령
+  uvHigh: boolean;      // 자외선지수 '높음' 이상
+};
 
 export type ChildProfile = {
   id: string;
@@ -25,10 +33,9 @@ export type ChildProfile = {
   notif?: {
     night: boolean;
     morning: boolean;
-    summary: boolean;
+    alerts: AlertSettings;
     nightTime: string;
     morningBefore: string;
-    summaryTime: string;
   };
   createdAt: number;
 };
@@ -53,6 +60,15 @@ const defaultProfiles: ChildProfile[] = [
     createdAt: 0,
   },
 ];
+
+export const defaultAlerts: AlertSettings = {
+  aiWarning: true,
+  tempDiff: false,
+  dustBad: false,
+  pollen: false,
+  dryness: false,
+  uvHigh: false,
+};
 
 export const calcAge = (year?: string): string => {
   if (!year) return "";

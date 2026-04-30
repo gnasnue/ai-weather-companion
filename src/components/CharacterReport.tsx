@@ -46,128 +46,19 @@ const calloutsData: Callout[] = [
   },
 ];
 
-// Cute, minimal, friendly child illustration (chibi-style)
+// 기존 Character 컴포넌트 (SVG) 전체 삭제하고 아래로 교체
+
 const Character = ({ gender }: { gender: Gender }) => {
-  const isFemale = gender === "female";
-  const skin = "hsl(28 70% 90%)";
-  const skinShade = "hsl(28 60% 82%)";
-  const hair = "hsl(25 55% 28%)";
-  const cheek = "hsl(0 80% 85%)";
-  const ink = "hsl(0 0% 18%)";
-  const top = isFemale ? "hsl(345 80% 82%)" : "hsl(200 75% 75%)";
-  const topShade = isFemale ? "hsl(345 60% 70%)" : "hsl(200 60% 62%)";
-  const bottom = isFemale ? "hsl(260 35% 55%)" : "hsl(220 35% 45%)";
+  const src = gender === "female"
+    ? "/images/character-girl.png"
+    : "/images/character-boy.png";
 
   return (
-    <svg
-      viewBox="0 0 200 240"
-      className="h-full w-auto"
-      aria-label={isFemale ? "여아 캐릭터" : "남아 캐릭터"}
-    >
-      {/* Soft ground shadow */}
-      <ellipse cx="100" cy="225" rx="55" ry="6" fill={ink} opacity="0.08" />
-
-      {/* Legs */}
-      <rect x="80" y="180" width="14" height="32" rx="6" fill={skin} />
-      <rect x="106" y="180" width="14" height="32" rx="6" fill={skin} />
-      {/* Shoes */}
-      <ellipse cx="87" cy="215" rx="12" ry="5" fill={ink} />
-      <ellipse cx="113" cy="215" rx="12" ry="5" fill={ink} />
-
-      {/* Body — rounded onesie/dress shape */}
-      {isFemale ? (
-        <path
-          d="M58 130 Q60 118 75 116 L125 116 Q140 118 142 130 L150 188 Q100 200 50 188 Z"
-          fill={top}
-        />
-      ) : (
-        <path
-          d="M62 130 Q64 118 78 116 L122 116 Q136 118 138 130 L142 188 Q100 196 58 188 Z"
-          fill={top}
-        />
-      )}
-      {/* Body shading */}
-      <path
-        d={
-          isFemale
-            ? "M58 175 Q100 188 142 175 L144 188 Q100 200 56 188 Z"
-            : "M58 178 Q100 188 142 178 L143 188 Q100 196 57 188 Z"
-        }
-        fill={topShade}
-        opacity="0.55"
-      />
-
-      {/* Pants peek for boy */}
-      {!isFemale && (
-        <path d="M70 180 L72 195 L128 195 L130 180 Z" fill={bottom} />
-      )}
-
-      {/* Arms */}
-      <ellipse cx="55" cy="148" rx="10" ry="22" fill={top} />
-      <ellipse cx="145" cy="148" rx="10" ry="22" fill={top} />
-      {/* Hands */}
-      <circle cx="55" cy="172" r="8" fill={skin} />
-      <circle cx="145" cy="172" r="8" fill={skin} />
-
-      {/* Neck */}
-      <rect x="92" y="100" width="16" height="14" rx="4" fill={skinShade} />
-
-      {/* Hair back layer (longer for girl) */}
-      {isFemale && (
-        <path
-          d="M44 70 Q44 110 60 122 L72 118 Q56 100 58 70 Z M156 70 Q156 110 140 122 L128 118 Q144 100 142 70 Z"
-          fill={hair}
-        />
-      )}
-
-      {/* Head — large chibi proportions */}
-      <ellipse cx="100" cy="68" rx="42" ry="40" fill={skin} />
-
-      {/* Hair top */}
-      {isFemale ? (
-        <>
-          {/* Bangs */}
-          <path
-            d="M60 60 Q62 28 100 26 Q138 28 140 60 Q132 48 118 50 Q108 38 100 50 Q92 38 82 50 Q68 48 60 60 Z"
-            fill={hair}
-          />
-          {/* Side puffs */}
-          <circle cx="54" cy="74" r="10" fill={hair} />
-          <circle cx="146" cy="74" r="10" fill={hair} />
-          {/* Tiny bow */}
-          <circle cx="78" cy="36" r="4" fill="hsl(345 85% 70%)" />
-          <circle cx="84" cy="36" r="4" fill="hsl(345 85% 70%)" />
-          <circle cx="81" cy="36" r="2" fill="hsl(345 70% 55%)" />
-        </>
-      ) : (
-        <path
-          d="M60 62 Q64 30 100 28 Q136 30 140 62 Q130 52 118 54 Q110 44 100 54 Q90 44 82 54 Q70 52 60 62 Z"
-          fill={hair}
-        />
-      )}
-
-      {/* Eyes — big sparkly chibi */}
-      <ellipse cx="82" cy="74" rx="6" ry="8" fill={ink} />
-      <ellipse cx="118" cy="74" rx="6" ry="8" fill={ink} />
-      {/* Eye sparkles */}
-      <circle cx="84" cy="71" r="2" fill="white" />
-      <circle cx="120" cy="71" r="2" fill="white" />
-      <circle cx="80" cy="77" r="1" fill="white" />
-      <circle cx="116" cy="77" r="1" fill="white" />
-
-      {/* Cheeks */}
-      <ellipse cx="72" cy="86" rx="6" ry="4" fill={cheek} opacity="0.75" />
-      <ellipse cx="128" cy="86" rx="6" ry="4" fill={cheek} opacity="0.75" />
-
-      {/* Smile */}
-      <path
-        d="M93 90 Q100 96 107 90"
-        stroke={ink}
-        strokeWidth="2"
-        fill="none"
-        strokeLinecap="round"
-      />
-    </svg>
+    <img
+      src={src}
+      alt={gender === "female" ? "여아 캐릭터" : "남아 캐릭터"}
+      className="h-full w-auto object-contain"
+    />
   );
 };
 

@@ -9,6 +9,7 @@ import Onboarding from "./pages/Onboarding.tsx";
 import Home from "./pages/Home.tsx";
 import Environment from "./pages/Environment.tsx";
 import Tips from "./pages/Tips.tsx";
+import Outfit from "./pages/Outfit.tsx";
 import My from "./pages/My.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/home" element={<Home />} />
           <Route path="/env" element={<Environment />} />
           <Route path="/tips" element={<Tips />} />
+          <Route path="/outfit" element={<Outfit />} />
           <Route path="/me" element={<My />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

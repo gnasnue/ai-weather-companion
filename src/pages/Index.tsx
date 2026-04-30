@@ -11,8 +11,8 @@ const features = [
 
 const pains = [
   { emoji: "😵‍💫", text: "날씨 앱, 미세먼지 앱, 꽃가루, 자외선 정보… 따로따로 확인하기 너무 번거로워요" },
-  { emoji: "🌡️", text: "일교차가 심한 날 아이 옷차림을 어떻게 해야 할지 매번 헷갈려요" },
-  { emoji: "⏰", text: "바쁜 아침에 이것저것 고민하고 챙길 시간이 없어요" },
+  { emoji: "🤔", text: "일교차가 심한 날 아이 옷차림을 어떻게 해야 할지 매번 헷갈려요" },
+  { emoji: "🤯", text: "바쁜 아침에 이것저것 고민하고 챙길 시간이 없어요" },
   { emoji: "🤒", text: "비염, 아토피, 감기에 잘 걸리는 아이… 민감한 우리 아이 체질에 맞는 꼼꼼한 케어 가이드가 필요해요" },
 ];
 
@@ -20,7 +20,7 @@ const diffs = [
   { icon: "👶", title: "내 아이만을 위한 맞춤 정보", desc: "아이 체질과 건강 정보를 기반으로 꼭 필요한 정보만 골라드려요" },
   { icon: "⏰", title: "시간대별 날씨 정보", desc: "등원, 야외활동, 하원, 저녁 산책까지 시간대별로 미리 확인하세요" },
   { icon: "🤖", title: "엄마 아빠를 위한 AI 비서", desc: "흩어진 정보를 대신 모아 분석까지, AI가 알아서 다 알려드려요" },
-  { icon: "🔬", title: "전문 학회 데이터 기반", desc: "대한소아과학회 등 전문 기관 자료를 근거로 해요" },
+  { icon: "🎓", title: "전문 학회 데이터 기반", desc: "대한소아과학회 등 전문 기관 자료를 근거로 해요" },
 ];
 
 const reviews = [
@@ -86,8 +86,7 @@ const Index = () => {
             <div className="mt-6 space-y-3">
               {pains.map((p, i) => (
                 <div key={i} className="rounded-2xl border border-border bg-card p-6 shadow-soft text-center">
-                  {/* 이모지 크기를 text-2xl로 통일하고 모양 유지 */}
-                  <div className="text-2xl">{p.emoji}</div>
+                  <div className="text-3xl">{p.emoji}</div>
                   <p className="mt-3 text-sm font-medium leading-relaxed text-foreground">{p.text}</p>
                 </div>
               ))}
@@ -95,7 +94,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Differentiators */}
+        {/* Differentiators - 수정됨: flex-col items-center 및 text-center 추가 */}
         <section className="bg-soft py-12">
           <div className="container-mobile">
             <h2 className="text-center text-xl font-bold tracking-tight">
@@ -103,7 +102,6 @@ const Index = () => {
             </h2>
             <div className="mt-6 space-y-3">
               {diffs.map((d) => (
-                /* items-center와 text-center 추가로 중앙 정렬 */
                 <div key={d.title} className="flex flex-col items-center text-center rounded-2xl bg-background p-6 shadow-soft">
                   <div className="text-2xl">{d.icon}</div>
                   <h3 className="mt-2 text-base font-semibold">{d.title}</h3>
@@ -114,7 +112,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Features */}
+        {/* Features - 수정됨: flex-col items-center 추가 */}
         <section className="py-12">
           <div className="container-mobile">
             <h2 className="text-center text-xl font-bold tracking-tight">
@@ -122,9 +120,8 @@ const Index = () => {
             </h2>
             <div className="mt-6 grid grid-cols-2 gap-3">
               {features.map((f) => (
-                /* items-center와 text-center 추가로 중앙 정렬 */
                 <div key={f.title} className="flex flex-col items-center text-center rounded-2xl border border-border bg-card p-4 transition-smooth hover:border-primary hover:shadow-card">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-2xl">{f.icon}</div>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-xl">{f.icon}</div>
                   <h3 className="mt-3 text-sm font-semibold leading-snug">{f.title}</h3>
                   <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{f.desc}</p>
                 </div>
@@ -133,8 +130,57 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ... 생략 (Reviews, CTA, Footer는 기존과 동일) ... */}
+        {/* Reviews */}
+        <section className="bg-secondary py-12">
+          <div className="container-mobile">
+            <h2 className="text-center text-xl font-bold tracking-tight">
+              부모님들의 이야기
+            </h2>
+            <div className="mt-6 space-y-3">
+              {reviews.map((r, i) => (
+                <div key={i} className="rounded-2xl bg-background p-4 shadow-soft">
+                  <div className="text-2xl text-primary leading-none">"</div>
+                  <p className="text-sm leading-relaxed text-foreground">{r.text}</p>
+                  <p className="mt-3 text-xs text-muted-foreground">— {r.who}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="bg-primary">
+          <div className="container-mobile py-12 text-center">
+            <h2 className="text-xl font-bold tracking-tight text-primary-foreground">
+              오늘부터 아이웨더가<br />대신 챙겨드릴게요
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-primary-foreground/90">
+              매일 아침 바쁜 엄마 아빠 곁에서,<br />
+              우리 아이의 하루를 함께 준비합니다.
+            </p>
+            <Link to="/signup" className="mt-6 block">
+              <Button size="lg" className="h-12 w-full bg-background text-base font-semibold text-foreground hover:bg-background/90">
+                무료로 시작하기
+              </Button>
+            </Link>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="border-t border-border bg-background">
+          <div className="container-mobile py-8">
+            <Logo />
+            <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
+              <a href="#" className="hover:text-foreground">이용약관</a>
+              <a href="#" className="hover:text-foreground">개인정보처리방침</a>
+              <a href="mailto:hello@aiweather.app" className="hover:text-foreground">hello@aiweather.app</a>
+            </div>
+            <p className="mt-4 text-xs text-muted-foreground">© 2025 아이웨더. All rights reserved.</p>
+          </div>
+        </footer>
       </div>
     </div>
   );
 };
+
+export default Index;

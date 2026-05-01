@@ -80,7 +80,7 @@ export function buildRecommendation(profile: ChildProfile, weather: WeatherData)
   const envPart = envReasons.slice(0, 2).join("이고 오후엔 ");
   const itemPart = itemRecommends.slice(0, 2).join("와 ");
   const message =
-    `${profile.name}는 오늘 ${envPart}이에요.${conditionNote} ${itemPart}을 꼭 챙겨주세요.` +
+    `${withDativeParticle(profile.name)} 오늘 ${envPart}이에요.${conditionNote} ${itemPart}을 꼭 챙겨주세요.` +
     (itemRecommends.length > 2 ? ` ${itemRecommends[2]}도 챙겨주세요.` : "");
 
   const badges = buildBadges(weather);

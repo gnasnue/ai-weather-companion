@@ -1,5 +1,6 @@
 import type { ChildProfile } from "./profile";
 import type { WeatherData } from "./weather-api";
+import { withDativeParticle } from "./korean";
 
 export interface CheckItem {
   icon: string;

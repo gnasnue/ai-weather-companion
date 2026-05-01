@@ -5,30 +5,10 @@ import Logo from "@/components/Logo";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import CharacterReport from "@/components/CharacterReport";
-import { withSubjectSuffix, withTopicParticle } from "@/lib/korean";
+import { withSubjectSuffix } from "@/lib/korean";
 import { ChildProfile, loadProfiles } from "@/lib/profile";
-
-const badges = [
-  { label: "미세먼지", value: "보통", tone: "ok" as const },
-  { label: "꽃가루", value: "높음", tone: "warn" as const },
-  { label: "자외선", value: "보통", tone: "ok" as const },
-  { label: "습도", value: "낮음", tone: "ok" as const },
-  { label: "바람", value: "강함", tone: "warn" as const },
-];
-
-const baseChecklist = [
-  { icon: "👕", text: "긴팔 + 얇은 가디건", key: "가디건" },
-  { icon: "🧣", text: "목수건 (오후 바람 강함)", key: "목수건" },
-  { icon: "😷", text: "마스크 (꽃가루 주의)", key: "마스크" },
-  { icon: "💧", text: "보습제 (건조 주의)", key: "보습제" },
-];
-
-const timeline = [
-  { time: "등원시간", hour: "08:00", icon: "⛅", temp: 12, feels: 10, dust: "보통", uv: "낮음", pollen: "높음", humidity: 45, wind: "약함" },
-  { time: "야외활동", hour: "11:00", icon: "☀️", temp: 18, feels: 17, dust: "보통", uv: "보통", pollen: "높음", humidity: 38, wind: "보통" },
-  { time: "하원시간", hour: "15:00", icon: "🌤️", temp: 21, feels: 20, dust: "나쁨", uv: "강함", pollen: "매우높음", humidity: 35, wind: "강함" },
-  { time: "저녁", hour: "18:00", icon: "🌥️", temp: 16, feels: 14, dust: "보통", uv: "낮음", pollen: "보통", humidity: 50, wind: "강함" },
-];
+import { buildRecommendation } from "@/lib/recommendation-engine";
+import { mockWeather } from "@/lib/weather-mock";
 
 const items = [
   { emoji: "🧣", name: "유아 면 목수건", price: "9,900원" },
@@ -42,9 +22,6 @@ const toneStyle = (t: "ok" | "warn") =>
     ? "bg-accent/10 text-accent border-accent/20"
     : "bg-muted text-foreground border-border";
 
-// Render text with:
-//   __word__  → environment keyword (red/accent + bold)
-//   **word**  → recommended item (black + bold)
 const renderRich = (text: string) => {
   const parts = text.split(/(\*\*[^*]+\*\*|__[^_]+__)/g);
   return parts.map((p, i) => {
@@ -65,9 +42,6 @@ const renderRich = (text: string) => {
     return <span key={i}>{p}</span>;
   });
 };
-
-const aiMessage = (name: string) =>
-  `오늘은 __꽃가루 많음__이고 오후엔 __바람 강함__이에요. ${withTopicParticle(name)} 비염이 있으니 **마스크**와 **목수건**을 꼭 챙겨주세요. __건조함__에 대비해 **보습제**도 발라주세요.`;
 
 const navItems = [
   { icon: "🏠", label: "홈", to: "/home" },
@@ -106,6 +80,13 @@ const Home = () => {
   }, [active]);
 
   const cur = profiles.find((p) => p.id === active) ?? profiles[0];
+
+  const recommendation = useMemo(
+    () => buildRecommendation(cur, mockWeather),
+    [cur]
+  );
+  const { checklist: baseChecklist, message, badges } = recommendation;
+
   const allDone = checked.length === baseChecklist.length;
 
   // simulate initial loading
@@ -116,8 +97,6 @@ const Home = () => {
 
   // Reset checklist when profile changes
   useEffect(() => setChecked([]), [active]);
-
-  const message = useMemo(() => aiMessage(cur.name), [cur.name]);
 
   const toggle = (i: number) =>
     setChecked((p) => (p.includes(i) ? p.filter((x) => x !== i) : [...p, i]));
@@ -277,7 +256,7 @@ const Home = () => {
                 ? Array.from({ length: 3 }).map((_, i) => (
                     <Skeleton key={i} className="h-44 w-[150px] shrink-0 rounded-2xl" />
                   ))
-                : timeline.map((t) => (
+                : mockWeather.timeline.map((t) => (
                     <article
                       key={t.time}
                       className="w-[150px] shrink-0 rounded-2xl border border-border bg-card p-4 shadow-soft"

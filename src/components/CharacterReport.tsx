@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { Check } from "lucide-react";
 import { withSubjectSuffix } from "@/lib/korean";
 
 type Gender = "male" | "female" | "unknown";
@@ -15,7 +17,7 @@ const calloutsData: Callout[] = [
   {
     id: "head",
     zone: "head",
-    title: "꽃가루 많음",
+    title: "꽃가루·미세먼지",
     desc: "마스크 챙기기",
     emoji: "😷",
     tone: "warn",
@@ -61,15 +63,15 @@ const Character = ({ gender }: { gender: Gender }) => {
 };
 
 // Anchor points on the character (% of container).
-// Character image is 380px tall, centered in a 420px container (image y: 4.8%–95.2%).
-// Image-internal landmarks (verified by alpha analysis of 280x420 PNG):
-//   face center ~24% of image, neck ~45%, torso/arms ~67%, legs/outfit ~83%
-// Mapped to container y: containerY = 4.8% + imgY * 90.4%
+// Character image is 320px tall in a 340px container (image y: 2.9%–97.1%).
+// Image-internal landmarks (verified by pixel analysis of 280x420 PNG):
+//   face center ~17%, neck (narrowest) ~27%, chest/torso ~40%, hips/legs upper ~68%
+// Mapped to container y: containerY = 2.9% + imgY * 94.2%
 const anchors: Record<Callout["zone"], { x: number; y: number }> = {
-  head: { x: 50, y: 26 },   // face
-  neck: { x: 50, y: 46 },   // neck (narrowest point between head & shoulders)
-  skin: { x: 50, y: 65 },   // torso / arms
-  outfit: { x: 50, y: 80 }, // legs / outfit
+  head: { x: 50, y: 19 },   // face center
+  neck: { x: 50, y: 28 },   // neck (narrowest between head & shoulders)
+  skin: { x: 50, y: 41 },   // chest / arms
+  outfit: { x: 50, y: 67 }, // hips / legs (top of pants/skirt)
 };
 
 // Side + vertical position of each callout box (matches anchor y).
@@ -77,10 +79,10 @@ const boxLayout: Record<
   Callout["zone"],
   { side: "left" | "right"; top: string }
 > = {
-  head: { side: "right", top: "22%" },
-  neck: { side: "left", top: "44%" },
-  skin: { side: "right", top: "63%" },
-  outfit: { side: "left", top: "78%" },
+  head: { side: "right", top: "19%" },
+  neck: { side: "left", top: "28%" },
+  skin: { side: "right", top: "48%" },
+  outfit: { side: "left", top: "70%" },
 };
 
 const CharacterReport = ({
@@ -90,6 +92,10 @@ const CharacterReport = ({
   gender: Gender;
   childName: string;
 }) => {
+  const [checked, setChecked] = useState<string[]>([]);
+  const toggle = (id: string) =>
+    setChecked((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
+
   return (
     <section className="mt-7">
       <div className="flex items-baseline justify-between">
@@ -99,14 +105,18 @@ const CharacterReport = ({
         <span className="text-xs text-muted-foreground">탭하면 자세히 →</span>
       </div>
 
-      <div className="mt-3 rounded-2xl border border-border bg-card p-4 shadow-soft">
-        <div className="relative mx-auto h-[420px] w-full max-w-[340px]">
+      <div className="mt-3 rounded-2xl border border-border bg-card px-4 pb-3 pt-3 shadow-soft">
+        <p className="mb-1 text-center text-xs font-semibold text-accent">
+          오늘의 준비물 잊지 말고 챙겨주세요
+        </p>
+
+        <div className="relative mx-auto h-[340px] w-full max-w-[340px]">
           {/* Character centered */}
-          <div className="absolute left-1/2 top-1/2 h-[380px] -translate-x-1/2 -translate-y-1/2">
+          <div className="absolute left-1/2 top-1/2 h-[320px] -translate-x-1/2 -translate-y-1/2">
             <Character gender={gender} />
           </div>
 
-          {/* SVG connector lines: from character anchor to the inner edge of each box */}
+          {/* SVG connector lines */}
           <svg
             className="pointer-events-none absolute inset-0 h-full w-full"
             viewBox="0 0 100 100"
@@ -115,10 +125,7 @@ const CharacterReport = ({
             {calloutsData.map((c) => {
               const a = anchors[c.zone];
               const layout = boxLayout[c.zone];
-              // Box inner edges (matching the 38% width boxes hugging each side)
-              // Boxes occupy 0–38% on left side, 62–100% on right side.
               const ex = layout.side === "right" ? 62 : 38;
-              // The box uses -translate-y-1/2, so its visual center sits at `top`.
               const ey = parseFloat(layout.top);
               return (
                 <line
@@ -141,33 +148,51 @@ const CharacterReport = ({
             const layout = boxLayout[c.zone];
             const sideClass =
               layout.side === "right" ? "right-0" : "left-0";
+            const isChecked = checked.includes(c.id);
             return (
               <div
                 key={c.id}
                 className={`absolute ${sideClass} w-[38%] -translate-y-1/2 animate-fade-in`}
                 style={{ top: layout.top }}
               >
-                <div
-                  className={`rounded-xl border px-2.5 py-1.5 shadow-soft ${
+                <button
+                  type="button"
+                  onClick={() => toggle(c.id)}
+                  className={`flex w-full items-start gap-1.5 rounded-xl border px-2 py-1.5 text-left shadow-soft transition-smooth ${
                     c.tone === "warn"
                       ? "border-accent/30 bg-accent/5"
                       : "border-border bg-background"
-                  }`}
+                  } ${isChecked ? "opacity-60" : ""}`}
                 >
-                  <div className="flex items-center gap-1">
-                    <span className="text-sm">{c.emoji}</span>
+                  <span
+                    className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border-2 transition-smooth ${
+                      isChecked
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-background"
+                    }`}
+                  >
+                    {isChecked && <Check className="h-2.5 w-2.5" strokeWidth={3} />}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs">{c.emoji}</span>
+                      <p
+                        className={`text-[11px] font-bold leading-tight ${
+                          c.tone === "warn" ? "text-accent" : "text-foreground"
+                        } ${isChecked ? "line-through" : ""}`}
+                      >
+                        {c.title}
+                      </p>
+                    </div>
                     <p
-                      className={`text-[11px] font-bold leading-tight ${
-                        c.tone === "warn" ? "text-accent" : "text-foreground"
+                      className={`mt-0.5 text-[11px] font-semibold leading-tight text-foreground ${
+                        isChecked ? "line-through" : ""
                       }`}
                     >
-                      {c.title}
+                      {c.desc}
                     </p>
                   </div>
-                  <p className="mt-0.5 text-[11px] font-semibold leading-tight text-foreground">
-                    {c.desc}
-                  </p>
-                </div>
+                </button>
               </div>
             );
           })}

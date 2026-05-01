@@ -60,20 +60,26 @@ const Character = ({ gender }: { gender: Gender }) => {
   );
 };
 
-// Position of each callout's anchor point on the character (in % of container)
+// Anchor points on the character (% of container).
+// Character image is 380px tall, centered. Approximate body landmarks:
+//   head/face ~ y 20%, neck ~ y 33%, torso/skin ~ y 50%, outfit/legs ~ y 68%
 const anchors: Record<Callout["zone"], { x: number; y: number }> = {
-  head: { x: 50, y: 18 },
-  neck: { x: 50, y: 36 },
-  skin: { x: 38, y: 52 },
-  outfit: { x: 62, y: 58 },
+  head: { x: 50, y: 20 },   // face
+  neck: { x: 50, y: 33 },   // neck
+  skin: { x: 50, y: 50 },   // arm/torso skin
+  outfit: { x: 50, y: 68 }, // outfit/legs
 };
 
-// Position of the callout box itself
-const boxPositions: Record<Callout["zone"], string> = {
-  head: "top-0 right-0",
-  neck: "top-[28%] left-0",
-  skin: "top-[48%] left-0",
-  outfit: "top-[52%] right-0",
+// Side + vertical position of each callout box (matches anchor y).
+// side: which edge the box hugs; top: vertical center of the box (% of container)
+const boxLayout: Record<
+  Callout["zone"],
+  { side: "left" | "right"; top: string }
+> = {
+  head: { side: "right", top: "16%" },
+  neck: { side: "left", top: "30%" },
+  skin: { side: "right", top: "48%" },
+  outfit: { side: "left", top: "66%" },
 };
 
 const CharacterReport = ({
@@ -99,7 +105,7 @@ const CharacterReport = ({
             <Character gender={gender} />
           </div>
 
-          {/* SVG connector lines */}
+          {/* SVG connector lines: from character anchor to the inner edge of each box */}
           <svg
             className="pointer-events-none absolute inset-0 h-full w-full"
             viewBox="0 0 100 100"
@@ -107,22 +113,22 @@ const CharacterReport = ({
           >
             {calloutsData.map((c) => {
               const a = anchors[c.zone];
-              const ends: Record<Callout["zone"], { x: number; y: number }> = {
-                head: { x: 78, y: 8 },
-                neck: { x: 22, y: 32 },
-                skin: { x: 22, y: 56 },
-                outfit: { x: 78, y: 56 },
-              };
-              const e = ends[c.zone];
+              const layout = boxLayout[c.zone];
+              // Box inner edges (matching the 38% width boxes hugging each side)
+              // Boxes occupy 0–38% on left side, 62–100% on right side.
+              const ex = layout.side === "right" ? 62 : 38;
+              // ey aligns with the vertical midpoint of the box
+              const ey = parseFloat(layout.top) + 6; // +6% ≈ half a small callout box
               return (
                 <line
                   key={c.id}
                   x1={a.x}
                   y1={a.y}
-                  x2={e.x}
-                  y2={e.y}
+                  x2={ex}
+                  y2={ey}
                   stroke="hsl(var(--border))"
-                  strokeWidth="0.4"
+                  strokeWidth="1"
+                  strokeDasharray="2 2"
                   vectorEffect="non-scaling-stroke"
                 />
               );
@@ -130,34 +136,40 @@ const CharacterReport = ({
           </svg>
 
           {/* Callouts */}
-          {calloutsData.map((c) => (
-            <div
-              key={c.id}
-              className={`absolute ${boxPositions[c.zone]} max-w-[44%] animate-fade-in`}
-            >
+          {calloutsData.map((c) => {
+            const layout = boxLayout[c.zone];
+            const sideClass =
+              layout.side === "right" ? "right-0" : "left-0";
+            return (
               <div
-                className={`rounded-xl border px-2.5 py-1.5 shadow-soft ${
-                  c.tone === "warn"
-                    ? "border-accent/30 bg-accent/5"
-                    : "border-border bg-background"
-                }`}
+                key={c.id}
+                className={`absolute ${sideClass} w-[38%] -translate-y-1/2 animate-fade-in`}
+                style={{ top: layout.top }}
               >
-                <div className="flex items-center gap-1">
-                  <span className="text-sm">{c.emoji}</span>
-                  <p
-                    className={`text-[11px] font-bold leading-tight ${
-                      c.tone === "warn" ? "text-accent" : "text-foreground"
-                    }`}
-                  >
-                    {c.title}
+                <div
+                  className={`rounded-xl border px-2.5 py-1.5 shadow-soft ${
+                    c.tone === "warn"
+                      ? "border-accent/30 bg-accent/5"
+                      : "border-border bg-background"
+                  }`}
+                >
+                  <div className="flex items-center gap-1">
+                    <span className="text-sm">{c.emoji}</span>
+                    <p
+                      className={`text-[11px] font-bold leading-tight ${
+                        c.tone === "warn" ? "text-accent" : "text-foreground"
+                      }`}
+                    >
+                      {c.title}
+                    </p>
+                  </div>
+                  <p className="mt-0.5 text-[11px] font-semibold leading-tight text-foreground">
+                    {c.desc}
                   </p>
                 </div>
-                <p className="mt-0.5 text-[11px] font-semibold leading-tight text-foreground">
-                  {c.desc}
-                </p>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

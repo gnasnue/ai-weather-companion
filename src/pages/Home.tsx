@@ -5,7 +5,7 @@ import Logo from "@/components/Logo";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import CharacterReport from "@/components/CharacterReport";
-import { withSubjectSuffix } from "@/lib/korean";
+import { withSubjectSuffix, withTopicParticle } from "@/lib/korean";
 import { ChildProfile, loadProfiles } from "@/lib/profile";
 
 const badges = [
@@ -67,7 +67,7 @@ const renderRich = (text: string) => {
 };
 
 const aiMessage = (name: string) =>
-  `${name}는 오늘 __꽃가루 많음__이고 오후엔 __바람 강함__이에요. 비염이 있으니 **마스크**와 **목수건**을 꼭 챙겨주세요. __건조함__에 대비해 **보습제**도 발라주세요.`;
+  `오늘은 __꽃가루 많음__이고 오후엔 __바람 강함__이에요. ${withTopicParticle(name)} 비염이 있으니 **마스크**와 **목수건**을 꼭 챙겨주세요. __건조함__에 대비해 **보습제**도 발라주세요.`;
 
 const navItems = [
   { icon: "🏠", label: "홈", to: "/home" },

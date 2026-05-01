@@ -15,3 +15,9 @@ export const hasJongseong = (name: string): boolean => {
 export const withSubjectSuffix = (name: string): string => {
   return hasJongseong(name) ? `${name}이를` : `${name}를`;
 };
+
+// Topic particle: "지우" -> "지우는", "지원" -> "지원이는"
+// Names with 받침 use the colloquial "이는" nickname pattern.
+export const withTopicParticle = (name: string): string => {
+  return hasJongseong(name) ? `${name}이는` : `${name}는`;
+};

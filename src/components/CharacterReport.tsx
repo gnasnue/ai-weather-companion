@@ -118,8 +118,8 @@ const CharacterReport = ({
               // Box inner edges (matching the 38% width boxes hugging each side)
               // Boxes occupy 0–38% on left side, 62–100% on right side.
               const ex = layout.side === "right" ? 62 : 38;
-              // ey aligns with the vertical midpoint of the box
-              const ey = parseFloat(layout.top) + 6; // +6% ≈ half a small callout box
+              // The box uses -translate-y-1/2, so its visual center sits at `top`.
+              const ey = parseFloat(layout.top);
               return (
                 <line
                   key={c.id}

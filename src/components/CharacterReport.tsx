@@ -61,25 +61,26 @@ const Character = ({ gender }: { gender: Gender }) => {
 };
 
 // Anchor points on the character (% of container).
-// Character image is 380px tall, centered. Approximate body landmarks:
-//   head/face ~ y 20%, neck ~ y 33%, torso/skin ~ y 50%, outfit/legs ~ y 68%
+// Character image is 380px tall, centered in a 420px container (image y: 4.8%–95.2%).
+// Image-internal landmarks (verified by alpha analysis of 280x420 PNG):
+//   face center ~24% of image, neck ~45%, torso/arms ~67%, legs/outfit ~83%
+// Mapped to container y: containerY = 4.8% + imgY * 90.4%
 const anchors: Record<Callout["zone"], { x: number; y: number }> = {
-  head: { x: 50, y: 20 },   // face
-  neck: { x: 50, y: 33 },   // neck
-  skin: { x: 50, y: 50 },   // arm/torso skin
-  outfit: { x: 50, y: 68 }, // outfit/legs
+  head: { x: 50, y: 26 },   // face
+  neck: { x: 50, y: 46 },   // neck (narrowest point between head & shoulders)
+  skin: { x: 50, y: 65 },   // torso / arms
+  outfit: { x: 50, y: 80 }, // legs / outfit
 };
 
 // Side + vertical position of each callout box (matches anchor y).
-// side: which edge the box hugs; top: vertical center of the box (% of container)
 const boxLayout: Record<
   Callout["zone"],
   { side: "left" | "right"; top: string }
 > = {
-  head: { side: "right", top: "16%" },
-  neck: { side: "left", top: "30%" },
-  skin: { side: "right", top: "48%" },
-  outfit: { side: "left", top: "66%" },
+  head: { side: "right", top: "22%" },
+  neck: { side: "left", top: "44%" },
+  skin: { side: "right", top: "63%" },
+  outfit: { side: "left", top: "78%" },
 };
 
 const CharacterReport = ({
@@ -117,8 +118,8 @@ const CharacterReport = ({
               // Box inner edges (matching the 38% width boxes hugging each side)
               // Boxes occupy 0–38% on left side, 62–100% on right side.
               const ex = layout.side === "right" ? 62 : 38;
-              // ey aligns with the vertical midpoint of the box
-              const ey = parseFloat(layout.top) + 6; // +6% ≈ half a small callout box
+              // The box uses -translate-y-1/2, so its visual center sits at `top`.
+              const ey = parseFloat(layout.top);
               return (
                 <line
                   key={c.id}

@@ -21,3 +21,9 @@ export const withSubjectSuffix = (name: string): string => {
 export const withTopicParticle = (name: string): string => {
   return hasJongseong(name) ? `${name}이는` : `${name}는`;
 };
+
+// Dative particle: "지우" -> "지우에게는", "민정" -> "민정이에게는"
+// Names with 받침 add the colloquial "이" before "에게는".
+export const withDativeParticle = (name: string): string => {
+  return hasJongseong(name) ? `${name}이에게는` : `${name}에게는`;
+};

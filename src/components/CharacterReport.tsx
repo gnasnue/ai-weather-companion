@@ -97,16 +97,16 @@ const CharacterReport = ({
     setChecked((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
 
   return (
-    <section className="mt-7">
+    <section className="mt-8">
       <div className="flex items-baseline justify-between">
-        <h2 className="text-base font-bold tracking-tight">
+        <h2 className="text-[15px] font-bold tracking-tight">
           {withSubjectSuffix(childName)} 위한 오늘의 종합 솔루션
         </h2>
-        <span className="text-xs text-muted-foreground">탭하면 자세히 →</span>
+        <span className="text-[11px] text-muted-foreground">탭하면 자세히 →</span>
       </div>
 
-      <div className="mt-3 rounded-2xl border border-border bg-card px-4 pb-3 pt-3 shadow-soft">
-        <p className="mb-1 text-center text-xs font-semibold text-accent">
+      <div className="mt-3 rounded-3xl border border-border/60 bg-card px-4 pb-3 pt-4">
+        <p className="mb-2 text-center text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
           오늘의 준비물 잊지 말고 챙겨주세요
         </p>
 

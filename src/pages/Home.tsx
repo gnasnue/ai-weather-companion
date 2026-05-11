@@ -250,12 +250,12 @@ const Home = () => {
           )}
 
           {/* Timeline */}
-          <section className="mt-7">
+          <section className="mt-8">
             <div className="flex items-baseline justify-between">
-              <h2 className="text-base font-bold tracking-tight">시간대별 환경</h2>
-              <span className="text-xs text-muted-foreground">가로로 스크롤 →</span>
+              <h2 className="text-[15px] font-bold tracking-tight">시간대별 환경</h2>
+              <span className="text-[11px] text-muted-foreground">가로로 스크롤 →</span>
             </div>
-            <div className="mt-3 -mx-5 flex flex-nowrap gap-3 overflow-x-auto overflow-y-hidden px-5 pb-2 scrollbar-hide [-webkit-overflow-scrolling:touch]">
+            <div className="mt-3 -mx-5 flex flex-nowrap gap-2.5 overflow-x-auto overflow-y-hidden px-5 pb-2 scrollbar-hide [-webkit-overflow-scrolling:touch]">
               {loading
                 ? Array.from({ length: 3 }).map((_, i) => (
                     <Skeleton key={i} className="h-44 w-[150px] shrink-0 rounded-2xl" />
@@ -263,20 +263,21 @@ const Home = () => {
                 : mockWeather.timeline.map((t) => (
                     <article
                       key={t.time}
-                      className="w-[150px] shrink-0 rounded-2xl border border-border bg-card p-4 shadow-soft"
+                      className="w-[148px] shrink-0 rounded-2xl border border-border/60 bg-card p-4 transition-smooth hover:border-foreground/30 hover:shadow-soft"
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-semibold">{t.time}</p>
-                          <p className="text-xs text-muted-foreground">{t.hour}</p>
+                          <p className="text-sm font-semibold tracking-tight">{t.time}</p>
+                          <p className="text-[11px] text-muted-foreground">{t.hour}</p>
                         </div>
-                        <span className="text-3xl">{t.icon}</span>
+                        <span className="text-2xl">{t.icon}</span>
                       </div>
-                      <div className="mt-2 flex items-baseline gap-1">
-                        <span className="text-2xl font-bold">{t.temp}°</span>
-                        <span className="text-xs text-muted-foreground">체감 {t.feels}°</span>
+                      <div className="mt-3 flex items-baseline gap-1">
+                        <span className="text-[26px] font-bold leading-none tracking-tight">{t.temp}°</span>
+                        <span className="text-[11px] text-muted-foreground">체감 {t.feels}°</span>
                       </div>
-                      <dl className="mt-3 space-y-1 text-xs">
+                      <div className="my-3 h-px bg-border/60" />
+                      <dl className="space-y-1.5 text-[11px]">
                         {([
                           ["미세먼지", t.dust, ["나쁨", "매우나쁨"].includes(t.dust)],
                           ["자외선", t.uv, ["강함", "매우강함"].includes(t.uv)],
@@ -289,7 +290,7 @@ const Home = () => {
                             <dd
                               className={
                                 bad
-                                  ? "font-bold text-accent"
+                                  ? "font-semibold text-accent"
                                   : "font-medium text-foreground"
                               }
                             >
@@ -309,11 +310,11 @@ const Home = () => {
           )}
 
           {/* Recommended items */}
-          <section className="mt-7">
-            <h2 className="text-base font-bold tracking-tight">
+          <section className="mt-8">
+            <h2 className="text-[15px] font-bold tracking-tight">
               {withSubjectSuffix(cur.name)} 위한 오늘의 추천 아이템
             </h2>
-            <div className="mt-3 -mx-5 flex flex-nowrap gap-3 overflow-x-auto overflow-y-hidden px-5 pb-2 scrollbar-hide [-webkit-overflow-scrolling:touch]">
+            <div className="mt-3 -mx-5 flex flex-nowrap gap-2.5 overflow-x-auto overflow-y-hidden px-5 pb-2 scrollbar-hide [-webkit-overflow-scrolling:touch]">
               {loading
                 ? Array.from({ length: 3 }).map((_, i) => (
                     <Skeleton key={i} className="h-44 w-[130px] shrink-0 rounded-2xl" />
@@ -322,13 +323,13 @@ const Home = () => {
                     <button
                       key={it.name}
                       onClick={() => toast("외부 구매 페이지로 이동합니다")}
-                      className="w-[130px] shrink-0 rounded-2xl border border-border bg-card p-3 text-left shadow-soft transition-smooth hover:border-primary"
+                      className="w-[132px] shrink-0 rounded-2xl border border-border/60 bg-card p-2.5 text-left transition-smooth hover:border-foreground/30 hover:shadow-soft"
                     >
-                      <div className="flex h-24 items-center justify-center rounded-xl bg-secondary text-5xl">
+                      <div className="flex h-24 items-center justify-center rounded-xl bg-soft text-4xl">
                         {it.emoji}
                       </div>
-                      <p className="mt-2.5 line-clamp-2 text-sm font-medium leading-snug">{it.name}</p>
-                      <p className="mt-1 text-xs font-semibold text-accent">{it.price}</p>
+                      <p className="mt-2.5 line-clamp-2 px-0.5 text-[13px] font-medium leading-snug">{it.name}</p>
+                      <p className="mt-1 px-0.5 text-xs font-semibold text-foreground">{it.price}</p>
                     </button>
                   ))}
             </div>

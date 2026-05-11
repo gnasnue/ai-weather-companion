@@ -19,8 +19,8 @@ const items = [
 
 const toneStyle = (t: "ok" | "warn") =>
   t === "warn"
-    ? "bg-accent/10 text-accent border-accent/20"
-    : "bg-muted text-foreground border-border";
+    ? "bg-accent/8 text-accent border-accent/15"
+    : "bg-background text-muted-foreground border-border";
 
 const renderRich = (text: string) => {
   const parts = text.split(/(\*\*[^*]+\*\*|__[^_]+__)/g);

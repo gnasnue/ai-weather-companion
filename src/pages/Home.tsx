@@ -135,20 +135,20 @@ const Home = () => {
               <button
                 key={p.id}
                 onClick={() => setActive(p.id)}
-                className={`flex shrink-0 items-center gap-2 rounded-full border-2 px-3.5 py-1.5 text-sm transition-smooth ${
+                className={`flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm transition-smooth ${
                   active === p.id
-                    ? "border-primary bg-secondary text-foreground"
-                    : "border-border bg-card text-muted-foreground"
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border bg-card text-muted-foreground hover:border-foreground/40"
                 }`}
               >
                 <span>{p.emoji}</span>
                 <span className="font-medium">{p.name}</span>
-                <span className="text-xs text-muted-foreground">{p.age}</span>
+                <span className={`text-xs ${active === p.id ? "text-background/70" : "text-muted-foreground"}`}>{p.age}</span>
               </button>
             ))}
             <button
               onClick={() => navigate("/onboarding")}
-              className="shrink-0 rounded-full border-2 border-dashed border-border px-3.5 py-1.5 text-sm text-muted-foreground hover:border-primary hover:text-foreground"
+              className="shrink-0 rounded-full border border-dashed border-border px-3.5 py-1.5 text-sm text-muted-foreground hover:border-foreground hover:text-foreground"
             >
               + 추가
             </button>
@@ -157,11 +157,11 @@ const Home = () => {
           {/* Location */}
           <button
             onClick={() => toast("위치 변경은 준비 중이에요")}
-            className="mt-3 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+            className="mt-4 flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
           >
-            <MapPin className="h-4 w-4" />
+            <MapPin className="h-3.5 w-3.5" />
             <span>서울 강남구</span>
-            <ChevronDown className="h-3.5 w-3.5" />
+            <ChevronDown className="h-3 w-3" />
           </button>
 
           {/* AI message card */}

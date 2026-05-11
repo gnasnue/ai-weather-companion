@@ -19,8 +19,8 @@ const items = [
 
 const toneStyle = (t: "ok" | "warn") =>
   t === "warn"
-    ? "bg-accent/10 text-accent border-accent/20"
-    : "bg-muted text-foreground border-border";
+    ? "bg-accent/8 text-accent border-accent/15"
+    : "bg-background text-muted-foreground border-border";
 
 const renderRich = (text: string) => {
   const parts = text.split(/(\*\*[^*]+\*\*|__[^_]+__)/g);
@@ -135,20 +135,20 @@ const Home = () => {
               <button
                 key={p.id}
                 onClick={() => setActive(p.id)}
-                className={`flex shrink-0 items-center gap-2 rounded-full border-2 px-3.5 py-1.5 text-sm transition-smooth ${
+                className={`flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm transition-smooth ${
                   active === p.id
-                    ? "border-primary bg-secondary text-foreground"
-                    : "border-border bg-card text-muted-foreground"
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border bg-card text-muted-foreground hover:border-foreground/40"
                 }`}
               >
                 <span>{p.emoji}</span>
                 <span className="font-medium">{p.name}</span>
-                <span className="text-xs text-muted-foreground">{p.age}</span>
+                <span className={`text-xs ${active === p.id ? "text-background/70" : "text-muted-foreground"}`}>{p.age}</span>
               </button>
             ))}
             <button
               onClick={() => navigate("/onboarding")}
-              className="shrink-0 rounded-full border-2 border-dashed border-border px-3.5 py-1.5 text-sm text-muted-foreground hover:border-primary hover:text-foreground"
+              className="shrink-0 rounded-full border border-dashed border-border px-3.5 py-1.5 text-sm text-muted-foreground hover:border-foreground hover:text-foreground"
             >
               + 추가
             </button>
@@ -157,11 +157,11 @@ const Home = () => {
           {/* Location */}
           <button
             onClick={() => toast("위치 변경은 준비 중이에요")}
-            className="mt-3 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+            className="mt-4 flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
           >
-            <MapPin className="h-4 w-4" />
+            <MapPin className="h-3.5 w-3.5" />
             <span>서울 강남구</span>
-            <ChevronDown className="h-3.5 w-3.5" />
+            <ChevronDown className="h-3 w-3" />
           </button>
 
           {/* AI message card */}
@@ -183,14 +183,16 @@ const Home = () => {
               <Skeleton className="mt-4 h-32 w-full rounded-xl" />
             </section>
           ) : (
-            <section className="mt-4 rounded-2xl bg-secondary p-5 shadow-soft animate-fade-up">
+            <section className="mt-4 rounded-3xl border border-border/60 bg-card p-5 shadow-soft animate-fade-up">
               <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-background text-xl">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-secondary text-lg">
                   🌤️
                 </div>
-                <div className="flex-1">
-                  <p className="text-xs font-medium text-accent">AI 리포트 · 오늘 아침</p>
-                  <p className="mt-1 leading-relaxed text-foreground">
+                <div className="flex-1 pt-0.5">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-accent">
+                    AI 리포트 · 오늘 아침
+                  </p>
+                  <p className="mt-1.5 text-[15px] leading-relaxed text-foreground break-keep">
                     {renderRich(message)}
                   </p>
                 </div>
@@ -200,21 +202,23 @@ const Home = () => {
                 {badges.map((b) => (
                   <span
                     key={b.label}
-                    className={`rounded-full border px-2.5 py-1 text-xs font-medium ${toneStyle(b.tone)}`}
+                    className={`rounded-full border px-2.5 py-1 text-[11px] font-medium ${toneStyle(b.tone)}`}
                   >
                     {b.label} · {b.value}
                   </span>
                 ))}
               </div>
 
-              <div className="mt-4 rounded-xl bg-background/70 p-3">
+              <div className="mt-5 rounded-2xl bg-soft p-4">
                 <div className="flex items-center justify-between px-1">
-                  <p className="text-xs font-semibold text-muted-foreground">오늘 챙길 것</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    오늘 챙길 것
+                  </p>
                   {allDone && (
                     <p className="text-xs font-semibold text-accent animate-fade-in">준비 끝! ✓</p>
                   )}
                 </div>
-                <ul className="mt-1 divide-y divide-border/60">
+                <ul className="mt-1 divide-y divide-border/40">
                   {baseChecklist.map((c, i) => {
                     const on = checked.includes(i);
                     return (
@@ -224,15 +228,15 @@ const Home = () => {
                           className="flex w-full items-center gap-3 px-1 py-2.5 text-left"
                         >
                           <span
-                            className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 transition-smooth ${
+                            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-smooth ${
                               on
-                                ? "border-primary bg-primary text-primary-foreground"
+                                ? "border-foreground bg-foreground text-background"
                                 : "border-border bg-background"
                             }`}
                           >
-                            {on && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
+                            {on && <Check className="h-3 w-3" strokeWidth={3} />}
                           </span>
-                          <span className="text-lg">{c.icon}</span>
+                          <span className="text-base">{c.icon}</span>
                           <span className={`flex-1 text-sm ${on ? "text-muted-foreground line-through" : "text-foreground"}`}>
                             {c.text}
                           </span>
@@ -246,12 +250,12 @@ const Home = () => {
           )}
 
           {/* Timeline */}
-          <section className="mt-7">
+          <section className="mt-8">
             <div className="flex items-baseline justify-between">
-              <h2 className="text-base font-bold tracking-tight">시간대별 환경</h2>
-              <span className="text-xs text-muted-foreground">가로로 스크롤 →</span>
+              <h2 className="text-[15px] font-bold tracking-tight">시간대별 환경</h2>
+              <span className="text-[11px] text-muted-foreground">가로로 스크롤 →</span>
             </div>
-            <div className="mt-3 -mx-5 flex flex-nowrap gap-3 overflow-x-auto overflow-y-hidden px-5 pb-2 scrollbar-hide [-webkit-overflow-scrolling:touch]">
+            <div className="mt-3 -mx-5 flex flex-nowrap gap-2.5 overflow-x-auto overflow-y-hidden px-5 pb-2 scrollbar-hide [-webkit-overflow-scrolling:touch]">
               {loading
                 ? Array.from({ length: 3 }).map((_, i) => (
                     <Skeleton key={i} className="h-44 w-[150px] shrink-0 rounded-2xl" />
@@ -259,20 +263,21 @@ const Home = () => {
                 : mockWeather.timeline.map((t) => (
                     <article
                       key={t.time}
-                      className="w-[150px] shrink-0 rounded-2xl border border-border bg-card p-4 shadow-soft"
+                      className="w-[148px] shrink-0 rounded-2xl border border-border/60 bg-card p-4 transition-smooth hover:border-foreground/30 hover:shadow-soft"
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-semibold">{t.time}</p>
-                          <p className="text-xs text-muted-foreground">{t.hour}</p>
+                          <p className="text-sm font-semibold tracking-tight">{t.time}</p>
+                          <p className="text-[11px] text-muted-foreground">{t.hour}</p>
                         </div>
-                        <span className="text-3xl">{t.icon}</span>
+                        <span className="text-2xl">{t.icon}</span>
                       </div>
-                      <div className="mt-2 flex items-baseline gap-1">
-                        <span className="text-2xl font-bold">{t.temp}°</span>
-                        <span className="text-xs text-muted-foreground">체감 {t.feels}°</span>
+                      <div className="mt-3 flex items-baseline gap-1">
+                        <span className="text-[26px] font-bold leading-none tracking-tight">{t.temp}°</span>
+                        <span className="text-[11px] text-muted-foreground">체감 {t.feels}°</span>
                       </div>
-                      <dl className="mt-3 space-y-1 text-xs">
+                      <div className="my-3 h-px bg-border/60" />
+                      <dl className="space-y-1.5 text-[11px]">
                         {([
                           ["미세먼지", t.dust, ["나쁨", "매우나쁨"].includes(t.dust)],
                           ["자외선", t.uv, ["강함", "매우강함"].includes(t.uv)],
@@ -285,7 +290,7 @@ const Home = () => {
                             <dd
                               className={
                                 bad
-                                  ? "font-bold text-accent"
+                                  ? "font-semibold text-accent"
                                   : "font-medium text-foreground"
                               }
                             >
@@ -305,11 +310,11 @@ const Home = () => {
           )}
 
           {/* Recommended items */}
-          <section className="mt-7">
-            <h2 className="text-base font-bold tracking-tight">
+          <section className="mt-8">
+            <h2 className="text-[15px] font-bold tracking-tight">
               {withSubjectSuffix(cur.name)} 위한 오늘의 추천 아이템
             </h2>
-            <div className="mt-3 -mx-5 flex flex-nowrap gap-3 overflow-x-auto overflow-y-hidden px-5 pb-2 scrollbar-hide [-webkit-overflow-scrolling:touch]">
+            <div className="mt-3 -mx-5 flex flex-nowrap gap-2.5 overflow-x-auto overflow-y-hidden px-5 pb-2 scrollbar-hide [-webkit-overflow-scrolling:touch]">
               {loading
                 ? Array.from({ length: 3 }).map((_, i) => (
                     <Skeleton key={i} className="h-44 w-[130px] shrink-0 rounded-2xl" />
@@ -318,13 +323,13 @@ const Home = () => {
                     <button
                       key={it.name}
                       onClick={() => toast("외부 구매 페이지로 이동합니다")}
-                      className="w-[130px] shrink-0 rounded-2xl border border-border bg-card p-3 text-left shadow-soft transition-smooth hover:border-primary"
+                      className="w-[132px] shrink-0 rounded-2xl border border-border/60 bg-card p-2.5 text-left transition-smooth hover:border-foreground/30 hover:shadow-soft"
                     >
-                      <div className="flex h-24 items-center justify-center rounded-xl bg-secondary text-5xl">
+                      <div className="flex h-24 items-center justify-center rounded-xl bg-soft text-4xl">
                         {it.emoji}
                       </div>
-                      <p className="mt-2.5 line-clamp-2 text-sm font-medium leading-snug">{it.name}</p>
-                      <p className="mt-1 text-xs font-semibold text-accent">{it.price}</p>
+                      <p className="mt-2.5 line-clamp-2 px-0.5 text-[13px] font-medium leading-snug">{it.name}</p>
+                      <p className="mt-1 px-0.5 text-xs font-semibold text-foreground">{it.price}</p>
                     </button>
                   ))}
             </div>
@@ -348,8 +353,8 @@ const Home = () => {
                     <Link
                       to={n.to}
                       onClick={handleClick}
-                      className={`flex flex-col items-center gap-0.5 py-2.5 text-xs transition-smooth ${
-                        isActive ? "font-semibold text-accent" : "text-muted-foreground hover:text-foreground"
+                      className={`flex flex-col items-center gap-0.5 py-2.5 text-[11px] transition-smooth ${
+                        isActive ? "font-semibold text-foreground" : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
                       <span className="text-lg">{n.icon}</span>

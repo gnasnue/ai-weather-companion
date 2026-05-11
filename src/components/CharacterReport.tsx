@@ -158,16 +158,16 @@ const CharacterReport = ({
                 <button
                   type="button"
                   onClick={() => toggle(c.id)}
-                  className={`flex w-full items-start gap-1.5 rounded-xl border px-2 py-1.5 text-left shadow-soft transition-smooth ${
+                  className={`flex w-full items-start gap-1.5 rounded-xl border px-2 py-1.5 text-left transition-smooth ${
                     c.tone === "warn"
-                      ? "border-accent/30 bg-accent/5"
-                      : "border-border bg-background"
-                  } ${isChecked ? "opacity-60" : ""}`}
+                      ? "border-accent/20 bg-accent/[0.04]"
+                      : "border-border/60 bg-background"
+                  } ${isChecked ? "opacity-50" : "hover:border-foreground/30"}`}
                 >
                   <span
-                    className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border-2 transition-smooth ${
+                    className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-smooth ${
                       isChecked
-                        ? "border-primary bg-primary text-primary-foreground"
+                        ? "border-foreground bg-foreground text-background"
                         : "border-border bg-background"
                     }`}
                   >

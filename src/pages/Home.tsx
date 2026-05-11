@@ -353,8 +353,8 @@ const Home = () => {
                     <Link
                       to={n.to}
                       onClick={handleClick}
-                      className={`flex flex-col items-center gap-0.5 py-2.5 text-xs transition-smooth ${
-                        isActive ? "font-semibold text-accent" : "text-muted-foreground hover:text-foreground"
+                      className={`flex flex-col items-center gap-0.5 py-2.5 text-[11px] transition-smooth ${
+                        isActive ? "font-semibold text-foreground" : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
                       <span className="text-lg">{n.icon}</span>

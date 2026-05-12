@@ -67,6 +67,9 @@ function buildOutfit(profile: ChildProfile | undefined): OutfitPlan {
   const pollenHigh = mockWeather.timeline.some(
     (t) => t.pollen === "높음" || t.pollen === "매우높음"
   );
+  const uvHigh =
+    mockWeather.uvIndex >= 6 ||
+    mockWeather.timeline.some((t) => t.uv === "강함" || t.uv === "매우강함");
 
   // Personalized headline based on sweat / cold sensitivity
   let headline = `${withTopicParticle(name)} 오늘 가벼운 레이어드가 좋아요.`;
@@ -85,10 +88,16 @@ function buildOutfit(profile: ChildProfile | undefined): OutfitPlan {
 
   const items: OutfitItem[] = [
     { category: "아우터", emoji: "🧥", name: "얇은 가디건", note: "탈착 쉬운 소재" },
+    { category: "아우터", emoji: "🧢", name: "경량 바람막이", note: "오후 바람 대비" },
     { category: "이너", emoji: "👕", name: "긴팔 면 티셔츠", note: "땀 흡수 좋은 코튼" },
+    { category: "이너", emoji: "👚", name: "반팔 베이스 티", note: "레이어드용" },
     { category: "하의", emoji: "👖", name: "면 조거 팬츠", note: "활동성 ↑" },
-    { category: "악세사리", emoji: "🧦", name: "발목 양말" },
+    { category: "하의", emoji: "🩳", name: "스트레치 7부 팬츠", note: "한낮 통기성" },
   ];
+
+  if (uvHigh) {
+    items.push({ category: "악세사리", emoji: "🕶️", name: "선글라스", note: "자외선 지수 높음" });
+  }
 
   if (windStrong) {
     items.push({ category: "악세사리", emoji: "🧣", name: "면 목수건", note: "오후 바람 강함" });

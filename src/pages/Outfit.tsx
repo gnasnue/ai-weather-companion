@@ -67,6 +67,9 @@ function buildOutfit(profile: ChildProfile | undefined): OutfitPlan {
   const pollenHigh = mockWeather.timeline.some(
     (t) => t.pollen === "높음" || t.pollen === "매우높음"
   );
+  const uvHigh =
+    mockWeather.uvIndex >= 6 ||
+    mockWeather.timeline.some((t) => t.uv === "강함" || t.uv === "매우강함");
 
   // Personalized headline based on sweat / cold sensitivity
   let headline = `${withTopicParticle(name)} 오늘 가벼운 레이어드가 좋아요.`;

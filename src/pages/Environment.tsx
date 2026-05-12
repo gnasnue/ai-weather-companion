@@ -221,6 +221,56 @@ const Environment = () => {
             <span className="ml-1 text-xs">· {current.updated}</span>
           </button>
 
+          {/* Personalized insights */}
+          <section className="mt-5">
+            <h2 className="text-base font-bold tracking-tight">
+              {cur ? `${withSubjectSuffix(cur.name)} 위한 맞춤 인사이트` : "맞춤 인사이트"}
+            </h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {cur?.conditions?.length
+                ? `${cur.name}의 건강 정보(${cur.conditions.join(", ")})를 반영했어요`
+                : "프로필을 등록하면 더 정확한 추천을 받을 수 있어요"}
+            </p>
+            <div className="mt-3 space-y-2.5">
+              {insights.map((it, i) => (
+                <article
+                  key={i}
+                  className={`flex items-start gap-3 rounded-2xl border p-4 shadow-soft ${
+                    it.tone === "warn"
+                      ? "border-accent/30 bg-accent/5"
+                      : it.tone === "ok"
+                        ? "border-border bg-card"
+                        : "border-primary/30 bg-secondary/40"
+                  }`}
+                >
+                  <span className="text-2xl">{it.icon}</span>
+                  <div className="flex-1">
+                    <p className="text-sm font-bold text-foreground">{it.title}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{it.body}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          {/* Outdoor activity index */}
+          <section className="mt-7 rounded-2xl border border-border bg-gradient-warm p-5 shadow-soft">
+            <p className="text-xs font-medium text-accent">오늘의 야외활동 지수</p>
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="text-3xl font-bold text-foreground">68</span>
+              <span className="text-sm text-muted-foreground">/ 100 · 보통</span>
+            </div>
+            <div className="mt-2 h-2 overflow-hidden rounded-full bg-background/60">
+              <div
+                className="h-full bg-gradient-to-r from-primary to-accent"
+                style={{ width: "68%" }}
+              />
+            </div>
+            <p className="mt-2 text-xs leading-relaxed text-foreground">
+              꽃가루·자외선이 다소 높아요. 짧은 산책 위주로 권장하며, 정오~오후 2시 사이는 그늘에서 쉬어주세요.
+            </p>
+          </section>
+
           {/* Current weather hero */}
           {loading ? (
             <Skeleton className="mt-4 h-44 w-full rounded-2xl" />
@@ -433,55 +483,6 @@ const Environment = () => {
             </p>
           </section>
 
-          {/* Personalized insights */}
-          <section className="mt-7">
-            <h2 className="text-base font-bold tracking-tight">
-              {cur ? `${withSubjectSuffix(cur.name)} 위한 맞춤 인사이트` : "맞춤 인사이트"}
-            </h2>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {cur?.conditions?.length
-                ? `${cur.name}의 건강 정보(${cur.conditions.join(", ")})를 반영했어요`
-                : "프로필을 등록하면 더 정확한 추천을 받을 수 있어요"}
-            </p>
-            <div className="mt-3 space-y-2.5">
-              {insights.map((it, i) => (
-                <article
-                  key={i}
-                  className={`flex items-start gap-3 rounded-2xl border p-4 shadow-soft ${
-                    it.tone === "warn"
-                      ? "border-accent/30 bg-accent/5"
-                      : it.tone === "ok"
-                        ? "border-border bg-card"
-                        : "border-primary/30 bg-secondary/40"
-                  }`}
-                >
-                  <span className="text-2xl">{it.icon}</span>
-                  <div className="flex-1">
-                    <p className="text-sm font-bold text-foreground">{it.title}</p>
-                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{it.body}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          {/* Extra: outdoor activity index */}
-          <section className="mt-7 rounded-2xl border border-border bg-gradient-warm p-5 shadow-soft">
-            <p className="text-xs font-medium text-accent">오늘의 야외활동 지수</p>
-            <div className="mt-1 flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-foreground">68</span>
-              <span className="text-sm text-muted-foreground">/ 100 · 보통</span>
-            </div>
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-background/60">
-              <div
-                className="h-full bg-gradient-to-r from-primary to-accent"
-                style={{ width: "68%" }}
-              />
-            </div>
-            <p className="mt-2 text-xs leading-relaxed text-foreground">
-              꽃가루·자외선이 다소 높아요. 짧은 산책 위주로 권장하며, 정오~오후 2시 사이는 그늘에서 쉬어주세요.
-            </p>
-          </section>
         </main>
 
         {/* Bottom nav */}
